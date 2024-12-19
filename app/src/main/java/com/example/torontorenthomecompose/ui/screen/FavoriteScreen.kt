@@ -28,6 +28,7 @@ fun FavoriteScreen() {
             items(houseList.value.size) { index ->
                 val house = houseList.value[index]
                 HouseItem(
+                    houseId=house.houseId,
                     imageUrl = house.imageUrl,
                     price = house.price,
                     bedrooms = house.bedrooms,
@@ -35,7 +36,9 @@ fun FavoriteScreen() {
                     bathrooms = house.bathrooms,
                     area = house.area,
                     createTime = house.createTime,
-                    onFavoriteClick = { /* Add your logic */ }
+                    onFavoriteClick = { houseId ->
+                        favoriteScreenViewModel.toggleFavorite(houseId) },
+                    isFavorite = true
                 )
             }
         }

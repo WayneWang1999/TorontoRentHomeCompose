@@ -15,9 +15,10 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewMod
 
 @Composable
 fun ListScreen() {
-    val viewModel: ListScreenViewModel = viewModel()
-    val houseList = viewModel.houseList.collectAsState()
-    val isLoading = viewModel.isLoading.collectAsState()
+    val listScreenViewModel: ListScreenViewModel = viewModel()
+    val houseList = listScreenViewModel.houseList.collectAsState()
+    val isLoading = listScreenViewModel.isLoading.collectAsState()
+    val favoriteHouseIds = listScreenViewModel.favoriteHouseIds.collectAsState()
 
     if (isLoading.value) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -28,6 +29,7 @@ fun ListScreen() {
             items(houseList.value.size) { index ->
                 val house = houseList.value[index]
                 HouseItem(
+                    houseId=house.houseId,
                     imageUrl = house.imageUrl,
                     price = house.price,
                     bedrooms = house.bedrooms,
@@ -35,7 +37,10 @@ fun ListScreen() {
                     bathrooms = house.bathrooms,
                     area = house.area,
                     createTime = house.createTime,
-                    onFavoriteClick = { /* Add your logic */ }
+                    onFavoriteClick = { houseId ->
+                        listScreenViewModel.toggleFavorite(houseId)  },
+                    // Check if the houseId exists in the favoriteHouseIds list
+                    isFavorite = favoriteHouseIds.value.contains(house.houseId)
                 )
             }
         }

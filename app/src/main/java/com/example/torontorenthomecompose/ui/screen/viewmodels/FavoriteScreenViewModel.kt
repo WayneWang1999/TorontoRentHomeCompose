@@ -35,7 +35,32 @@ class FavoriteScreenViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _isUserLoggedOut = MutableStateFlow(false)
+    val isUserLoggedOut: StateFlow<Boolean> = _isUserLoggedOut
+
+    private val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+        val user = firebaseAuth.currentUser
+        if (user == null) {
+            // User has logged out
+            _favoriteHouseIds.value = emptySet()
+            _houseList.value = emptyList()
+            _isLoading.value = false
+            _isUserLoggedOut.value = true
+            Log.d("FavoriteScreenViewModel", "User logged out, state cleared.")
+        } else {
+            // User has logged in
+            _isUserLoggedOut.value = false
+            Log.d("FavoriteScreenViewModel", "User logged in, refreshing state.")
+
+            // Refresh favorite house IDs and house list
+            fetchFavoriteHouseIds()
+            fetchHouses()
+        }
+    }
+
+
     init {
+        auth.addAuthStateListener(authStateListener)
         fetchHouses()
         fetchFavoriteHouseIds()
     }
@@ -81,8 +106,6 @@ class FavoriteScreenViewModel : ViewModel() {
         }
     }
 
-
-
     fun toggleFavorite(houseId: String) {
         viewModelScope.launch {
             val user = auth.currentUser
@@ -98,7 +121,7 @@ class FavoriteScreenViewModel : ViewModel() {
 
                 try {
                     db.collection("buyers")
-                        .document(user.uid) // Use UID as the document ID
+                        .document(user.uid)
                         .update("favoriteHouseIds", currentFavorites.toList())
                         .await()
                 } catch (e: Exception) {
@@ -108,19 +131,10 @@ class FavoriteScreenViewModel : ViewModel() {
         }
     }
 
-    fun logout() {
-        // Clear the user's favorite house IDs
-        _favoriteHouseIds.value = emptySet()
 
-        // Optionally, clear the house list if needed
-        _houseList.value = emptyList()
-
-        // Perform Firebase Auth logout
-        auth.signOut()
-
-        // Reset the isLoading state
-        _isLoading.value = true
-
-        Log.d("FavoriteScreenViewModel", "User logged out, favoriteHouseIds cleared.")
+    override fun onCleared() {
+        super.onCleared()
+        auth.removeAuthStateListener(authStateListener)
     }
 }
+

@@ -26,12 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.AccountScreenViewModel
-import com.example.torontorenthomecompose.ui.screen.viewmodels.FavoriteScreenViewModel
 
 @Composable
 fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) {
     // ViewModel State
-    val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel()
+
     val email by accountScreenViewModel.email
     val password by accountScreenViewModel.password
     val isPasswordVisible by accountScreenViewModel.isPasswordVisible
@@ -64,7 +63,9 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
                 label = { Text("Password") },
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = { accountScreenViewModel.isPasswordVisible.value = !isPasswordVisible }) {
+                    IconButton(onClick = {
+                        accountScreenViewModel.isPasswordVisible.value = !isPasswordVisible
+                    }) {
                         Icon(
                             imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = null
@@ -80,7 +81,7 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
             // Error Message
             if (errorMessage != null) {
                 Text(
-                    text = errorMessage?:"",
+                    text = errorMessage ?: "",
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -104,7 +105,7 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
             Button(
                 onClick = {
                     accountScreenViewModel.logoutUser()
-                    favoriteScreenViewModel.logout() },
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Logout")

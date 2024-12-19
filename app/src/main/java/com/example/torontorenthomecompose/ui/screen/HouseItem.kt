@@ -33,6 +33,7 @@ import java.util.Locale
 
 @Composable
 fun HouseItem(
+    houseId: String,
     imageUrl: List<String>, // Image URL for the house image
     price: Int, // Price of the house
     bedrooms: Int, // Number of bedrooms
@@ -40,7 +41,8 @@ fun HouseItem(
     bathrooms: Int,
     area: Int,
     createTime: String,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: (String) -> Unit,
+    isFavorite: Boolean
 ) {
     val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(price)
     Column(
@@ -64,11 +66,13 @@ fun HouseItem(
                 modifier = Modifier.weight(1f)
             )
             IconButton(
-                onClick = onFavoriteClick,
+                onClick = { onFavoriteClick(houseId) }
 
                 ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_action_favorite),
+                    painter = painterResource(
+                        id = if (isFavorite) R.drawable.ic_action_filledfavorite else R.drawable.ic_action_favorite
+                    ),
                     contentDescription = "Favorite",
                     modifier = Modifier.size(40.dp),
                     tint = Color.Red
