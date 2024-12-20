@@ -6,20 +6,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +26,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.torontorenthomecompose.R
-import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.MapScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -66,43 +61,25 @@ fun MapScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(40.dp)
-                .background(Color.White), // White Background for the Top Bar
+                .height(56.dp)
+                .background(Color(0xFF718BD0)), // Blue Background
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // App Name
             Text(
                 text = "TORH.ca",
                 modifier = Modifier
-                    .weight(3f)
-                    .padding(start = 16.dp, top = 4.dp)
-                    .background(Color(0xFF718BD0)) // Blue Background
-                    .clickable { },
+                    .padding(start = 16.dp)
+                    .weight(1f),
                 color = Color.White,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                maxLines = 1
             )
-
-            // Search View
-            var searchQuery by remember { mutableStateOf("") }
-            TextField(
-                value = searchQuery,
-                onValueChange = { searchQuery = it },
-                modifier = Modifier
-                    .weight(6f)
-                    .fillMaxHeight()
-                    .background(Color(0xFF718BD0)), // Blue Background
-                placeholder = { Text("Search") },
-
-                )
-
-            // Filter Icon
             Icon(
                 painter = painterResource(id = R.drawable.ic_action_filter),
                 contentDescription = "Filter",
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .background(Color(0xFF718BD0)) // Blue Background
+                    .padding(end = 16.dp)
+                    .size(24.dp)
                     .clickable { },
                 tint = Color.White
             )

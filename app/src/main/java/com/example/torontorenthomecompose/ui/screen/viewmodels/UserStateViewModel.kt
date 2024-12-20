@@ -1,6 +1,5 @@
 package com.example.torontorenthomecompose.ui.screen.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +18,6 @@ class UserStateViewModel : ViewModel() {
     // StateFlow to store the user's email
     private val _userEmail = MutableStateFlow<String?>(null)
     val userEmail: StateFlow<String?> = _userEmail
-    // Initialize with current user info
     // Expose current user to other ViewModels
     val currentUser: FirebaseUser?
         get() = auth.currentUser

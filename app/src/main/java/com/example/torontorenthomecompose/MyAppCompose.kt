@@ -9,7 +9,6 @@ class MyAppCompose : Application() {
     lateinit var database: HouseDatabase
         private set
 
-
     override fun onCreate() {
         super.onCreate()
       //  instance=this
