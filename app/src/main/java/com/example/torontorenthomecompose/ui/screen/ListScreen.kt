@@ -37,7 +37,10 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewMod
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
-fun ListScreen(userStateViewModel: UserStateViewModel) {
+fun ListScreen(
+    userStateViewModel: UserStateViewModel,
+    onFilterClick: () -> Unit
+) {
     val listScreenViewModel: ListScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -104,7 +107,7 @@ fun ListScreen(userStateViewModel: UserStateViewModel) {
                     .padding(end = 16.dp)
                     .size(40.dp)
                     .weight(0.15f)
-                    .clickable { /* Handle filter click */ }
+                    .clickable { onFilterClick() }
                     .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
                 contentAlignment = Alignment.Center
             ) {

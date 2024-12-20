@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.torontorenthome.util.HouseOperations
 import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
+import com.example.torontorenthomecompose.ui.screen.FilterScreen
 import com.example.torontorenthomecompose.ui.screen.ListScreen
 import com.example.torontorenthomecompose.ui.screen.MapScreen
 import com.example.torontorenthomecompose.ui.screen.SignUpScreen
@@ -105,10 +106,17 @@ fun NavHostContainer(
     userStateViewModel: UserStateViewModel
 ) {
     NavHost(navController = navController, startDestination = Routes.MAP, modifier = modifier) {
-        composable(Routes.MAP) { MapScreen(userStateViewModel) }
-        composable(Routes.LIST) { ListScreen(userStateViewModel) }
+        composable(Routes.MAP) { MapScreen(userStateViewModel,
+            onFilterClick = { navController.navigate("filter") }
+        ) }
+        composable(Routes.LIST) { ListScreen(userStateViewModel,
+            onFilterClick = { navController.navigate("filter") }
+        ) }
         composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
+        composable(Routes.FILTER) { FilterScreen(
+            onBackClick = { navController.popBackStack() }
+        ) }
         composable(Routes.SIGNUP){ SignUpScreen(
             onBackClick = { navController.popBackStack() },
             navController
@@ -138,4 +146,5 @@ object Routes {
     const val FAVORITES = "favorites"
     const val ACCOUNT = "account"
     const val SIGNUP="signup"
+    const val FILTER="filter"
 }

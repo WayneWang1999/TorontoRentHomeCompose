@@ -45,6 +45,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapScreen(
     userStateViewModel: UserStateViewModel,
+    onFilterClick: () -> Unit
 ) {
     val mapScreenViewModel: MapScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
@@ -116,7 +117,7 @@ fun MapScreen(
                     .padding(end = 16.dp)
                     .size(40.dp)
                     .weight(0.15f)
-                    .clickable { /* Handle filter click */ }
+                    .clickable { onFilterClick() }
                     .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
                 contentAlignment = Alignment.Center
             ) {
