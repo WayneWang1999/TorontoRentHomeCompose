@@ -12,10 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +41,7 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 
+
 @Composable
 fun MapScreen(
     userStateViewModel: UserStateViewModel,
@@ -52,38 +58,78 @@ fun MapScreen(
     val selectedHouse by mapScreenViewModel.selectedHouse.collectAsState()
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds = userStateViewModel.favoriteHouseIds.collectAsState()
+    // Search query state
+    var searchQuery by remember { mutableStateOf("") }
+//    val filteredHouses = if (searchQuery.isBlank()) {
+//       // houseList
+//    } else {
+////       // houseList.filter { house ->
+////            house.address.contains(searchQuery, ignoreCase = true) || house.price.toString().contains(searchQuery)
+//        }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF5F5F5)) // Light Gray Background
     ) {
-        // Top Bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
-                .background(Color(0xFF718BD0)), // Blue Background
+                .height(64.dp) // Slightly taller for better visibility
+                .background(Color(0xFF1E88E5)), // Updated to a more modern blue shade
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Logo or Title
             Text(
                 text = "TORH.ca",
                 modifier = Modifier
-                    .padding(start = 16.dp)
-                    .weight(1f),
+                    .padding(start = 12.dp)
+                    .weight(0.25f),
                 color = Color.White,
-                fontSize = 20.sp,
+                fontSize = 22.sp,
                 maxLines = 1
             )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_action_filter),
-                contentDescription = "Filter",
+
+            // Search Component
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                label = { Text("Search...") },
+                singleLine = true,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .weight(0.6f),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color(0xFFF5F5F5), // Background color
+                    unfocusedContainerColor = Color(0xFFF5F5F5),
+                    focusedIndicatorColor = Color.Blue, // Border color when focused
+                    unfocusedIndicatorColor = Color.Gray, // Border color when not focused
+                    focusedLabelColor = Color.Blue, // Label color when focused
+                    unfocusedLabelColor = Color.Gray // Label color when not focused
+                )
+            )
+
+
+            // Filter Icon
+            Box(
                 modifier = Modifier
                     .padding(end = 16.dp)
-                    .size(24.dp)
-                    .clickable { },
-                tint = Color.White
-            )
+                    .size(40.dp)
+                    .weight(0.15f)
+                    .clickable { /* Handle filter click */ }
+                    .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_action_filter),
+                    contentDescription = "Filter",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
+
+
 
         // MapView
         Box(modifier = Modifier.fillMaxSize()) {
