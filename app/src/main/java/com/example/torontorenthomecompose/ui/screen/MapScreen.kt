@@ -61,13 +61,13 @@ fun MapScreen(
     val favoriteHouseIds = userStateViewModel.favoriteHouseIds.collectAsState()
     // Search query state
     var searchQuery by remember { mutableStateOf("") }
-//    val filteredHouses = if (searchQuery.isBlank()) {
-//       // houseList
-//    } else {
-////       // houseList.filter { house ->
-////            house.address.contains(searchQuery, ignoreCase = true) || house.price.toString().contains(searchQuery)
-//        }
-
+    val filteredHouses = if (searchQuery.isBlank()) {
+       houses
+    } else {
+        houses.filter { house ->
+            house.address.contains(searchQuery, ignoreCase = true)
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -147,7 +147,7 @@ fun MapScreen(
                 }
             ) {
                 // Add markers for houses locations
-                houses.forEach { house ->
+                filteredHouses.forEach { house ->
                     Marker(
                         state = MarkerState(LatLng(house.latitude, house.longitude)),
                         title = house.address,

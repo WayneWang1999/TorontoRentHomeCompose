@@ -60,7 +60,7 @@ fun ListScreen(
         houseList
     } else {
         houseList.filter { house ->
-            house.address.contains(searchQuery, ignoreCase = true) || house.price.toString().contains(searchQuery)
+            house.address.contains(searchQuery, ignoreCase = true)
         }
     }
 
