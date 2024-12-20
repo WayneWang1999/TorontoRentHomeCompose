@@ -104,7 +104,7 @@ fun NavHostContainer(
     userStateViewModel: UserStateViewModel
 ) {
     NavHost(navController = navController, startDestination = Routes.MAP, modifier = modifier) {
-        composable(Routes.MAP) { MapScreen() }
+        composable(Routes.MAP) { MapScreen(userStateViewModel) }
         composable(Routes.LIST) { ListScreen(userStateViewModel) }
         composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel) } // Pass navController

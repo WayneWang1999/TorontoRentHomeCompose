@@ -90,6 +90,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     implementation("androidx.compose.foundation:foundation:1.5.0") // Or your version
+    implementation("com.google.maps.android:maps-compose:2.13.0") // Google Maps Compose library
 
 
 }
