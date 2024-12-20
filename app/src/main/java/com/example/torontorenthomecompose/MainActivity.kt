@@ -61,9 +61,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(userStateViewModel: UserStateViewModel) {
     val navController = rememberNavController()
+    val currentRoute = currentRoute(navController)
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = {
+            if (currentRoute !in listOf(Routes.FILTER)) {
+                BottomNavigationBar(navController)
+            }
+        }
     ) { innerPadding ->
         NavHostContainer(navController, Modifier.padding(innerPadding),userStateViewModel)
     }
