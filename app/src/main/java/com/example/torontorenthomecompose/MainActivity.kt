@@ -32,6 +32,7 @@ import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
 import com.example.torontorenthomecompose.ui.screen.ListScreen
 import com.example.torontorenthomecompose.ui.screen.MapScreen
+import com.example.torontorenthomecompose.ui.screen.SignUpScreen
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 class MainActivity : ComponentActivity() {
@@ -107,7 +108,13 @@ fun NavHostContainer(
         composable(Routes.MAP) { MapScreen(userStateViewModel) }
         composable(Routes.LIST) { ListScreen(userStateViewModel) }
         composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
-        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel) } // Pass navController
+        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
+        composable(Routes.SIGNUP){ SignUpScreen(
+            onBackClick = { navController.popBackStack() },
+            onSignUpClick = { firstName, lastName, email, password ->
+                // Handle sign-up logic
+            }
+        )} // Pass navController
     }
 }
 
@@ -132,4 +139,5 @@ object Routes {
     const val LIST = "list"
     const val FAVORITES = "favorites"
     const val ACCOUNT = "account"
+    const val SIGNUP="signup"
 }

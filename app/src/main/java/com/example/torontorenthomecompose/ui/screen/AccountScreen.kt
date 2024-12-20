@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,16 +22,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
 fun AccountScreen(
     userStateViewModel: UserStateViewModel,
+    navController: NavHostController
 ) {
     // UserStateViewModel State
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
@@ -87,8 +94,23 @@ fun AccountScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Login")
+                Text("Sign In")
             }
+            Text(
+                text = "Create an account",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF718BD0), // Add a color (blue)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 16.dp)
+                    .clickable {
+                        navController.navigate("signup")
+                        //open a new screen
+                    },
+                textAlign = TextAlign.Center
+
+            )
         } else {
             // Logged-In UI
             Text(

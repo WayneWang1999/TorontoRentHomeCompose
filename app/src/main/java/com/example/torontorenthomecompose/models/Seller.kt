@@ -1,8 +1,9 @@
 package com.example.torontorenthome.models
 
 data class Seller(
-    val name:String,
+    val firstName:String,
+    val lastName:String,
     val email:String,
     val password:String,
-    val ownerHouseIds:List<String>,
+    val sellerHouseIds:List<String>,
 )
