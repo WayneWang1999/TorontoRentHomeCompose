@@ -1,24 +1,38 @@
 package com.example.torontorenthomecompose.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
+import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 
 @Composable
-fun ListScreen() {
-    val listScreenViewModel: ListScreenViewModel = viewModel()
+fun ListScreen(userStateViewModel: UserStateViewModel) {
+    val listScreenViewModel: ListScreenViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return ListScreenViewModel(userStateViewModel) as T
+            }
+        }
+    )
+
+    val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val houseList = listScreenViewModel.houseList.collectAsState()
     val isLoading = listScreenViewModel.isLoading.collectAsState()
-    val favoriteHouseIds = listScreenViewModel.favoriteHouseIds.collectAsState()
+    val favoriteHouseIds = userStateViewModel.favoriteHouseIds.collectAsState()
 
     if (isLoading.value) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -28,8 +42,14 @@ fun ListScreen() {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(houseList.value.size) { index ->
                 val house = houseList.value[index]
+                val isFavorite = if (isLoggedIn) {
+                    favoriteHouseIds.value.contains(house.houseId)
+                } else {
+                    false
+                }
+             //  Log.d("UserState", "Lazy Column change Recomposing item: ${house.houseId}, isFavorite: $isFavorite, isLoggedIn: $isLoggedIn")
                 HouseItem(
-                    houseId=house.houseId,
+                    houseId = house.houseId,
                     imageUrl = house.imageUrl,
                     price = house.price,
                     bedrooms = house.bedrooms,
@@ -38,14 +58,15 @@ fun ListScreen() {
                     area = house.area,
                     createTime = house.createTime,
                     onFavoriteClick = { houseId ->
-                        listScreenViewModel.toggleFavorite(houseId)  },
-                    // Check if the houseId exists in the favoriteHouseIds list
-                    isFavorite = favoriteHouseIds.value.contains(house.houseId)
+                        userStateViewModel.toggleFavorite(houseId)
+                    },
+                    isFavorite = isFavorite
                 )
             }
         }
     }
 }
+
 
 
 

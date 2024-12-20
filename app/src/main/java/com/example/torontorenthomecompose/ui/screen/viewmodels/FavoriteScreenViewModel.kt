@@ -15,14 +15,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class FavoriteScreenViewModel : ViewModel() {
+class FavoriteScreenViewModel(
+    private val userStateViewModel: UserStateViewModel // Inject the UserStateViewModel
+) : ViewModel() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _houseList = MutableStateFlow<List<House>>(emptyList())
     val houseList: StateFlow<List<House>> = _houseList
 
-    private val _favoriteHouseIds = MutableStateFlow<Set<String>>(emptySet())
+      private val _favoriteHouseIds = userStateViewModel.favoriteHouseIds
+
     val favoriteHouses: StateFlow<List<House>> = _houseList
         .combine(_favoriteHouseIds) { houses, favoriteIds ->
             houses.filter { it.houseId in favoriteIds }
@@ -34,37 +37,11 @@ class FavoriteScreenViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
-
-    private val _isUserLoggedOut = MutableStateFlow(false)
-    val isUserLoggedOut: StateFlow<Boolean> = _isUserLoggedOut
-
-    private val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-        val user = firebaseAuth.currentUser
-        if (user == null) {
-            // User has logged out
-            _favoriteHouseIds.value = emptySet()
-            _houseList.value = emptyList()
-            _isLoading.value = false
-            _isUserLoggedOut.value = true
-            Log.d("FavoriteScreenViewModel", "User logged out, state cleared.")
-        } else {
-            // User has logged in
-            _isUserLoggedOut.value = false
-            Log.d("FavoriteScreenViewModel", "User logged in, refreshing state.")
-
-            // Refresh favorite house IDs and house list
-            fetchFavoriteHouseIds()
-            fetchHouses()
-        }
-    }
-
-
     init {
-        auth.addAuthStateListener(authStateListener)
-        fetchHouses()
-        fetchFavoriteHouseIds()
-    }
 
+        fetchHouses()
+
+    }
     private fun fetchHouses() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -82,59 +59,6 @@ class FavoriteScreenViewModel : ViewModel() {
                 _isLoading.value = false
             }
         }
-    }
-
-    private fun fetchFavoriteHouseIds() {
-        viewModelScope.launch {
-            val user = auth.currentUser
-            if (user != null) {
-                try {
-                    val document = db.collection("buyers")
-                        .document(user.uid)
-                        .get()
-                        .await()
-
-                    val favoriteHouseIds = document["favoriteHouseIds"] as? List<String> ?: emptyList()
-                    _favoriteHouseIds.value = favoriteHouseIds.toSet()
-                    Log.d("FavoriteHouseFetch", "Fetched favorite house IDs: ${_favoriteHouseIds.value}")
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    _favoriteHouseIds.value = emptySet()
-                    Log.e("FavoriteHouseFetch", "Error fetching favorite house IDs", e)
-                }
-            }
-        }
-    }
-
-    fun toggleFavorite(houseId: String) {
-        viewModelScope.launch {
-            val user = auth.currentUser
-            if (user != null) {
-                val currentFavorites = _favoriteHouseIds.value.toMutableSet()
-                if (currentFavorites.contains(houseId)) {
-                    currentFavorites.remove(houseId)
-                } else {
-                    currentFavorites.add(houseId)
-                }
-
-                _favoriteHouseIds.value = currentFavorites
-
-                try {
-                    db.collection("buyers")
-                        .document(user.uid)
-                        .update("favoriteHouseIds", currentFavorites.toList())
-                        .await()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-
-
-    override fun onCleared() {
-        super.onCleared()
-        auth.removeAuthStateListener(authStateListener)
     }
 }
 

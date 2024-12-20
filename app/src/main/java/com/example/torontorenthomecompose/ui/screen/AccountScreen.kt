@@ -1,6 +1,5 @@
 package com.example.torontorenthomecompose.ui.screen
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,30 +12,34 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.torontorenthomecompose.ui.screen.viewmodels.AccountScreenViewModel
+import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
-fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) {
-    // ViewModel State
+fun AccountScreen(
+    userStateViewModel: UserStateViewModel,
+) {
+    // UserStateViewModel State
+    val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
+    val userEmail by userStateViewModel.userEmail.collectAsState()
 
-    val email by accountScreenViewModel.email
-    val password by accountScreenViewModel.password
-    val isPasswordVisible by accountScreenViewModel.isPasswordVisible
-    val isLoggedIn by accountScreenViewModel.isLoggedIn
-    val errorMessage by accountScreenViewModel.errorMessage
-    val userEmail by accountScreenViewModel.userEmail
+    // Local states for email and password input
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -45,10 +48,10 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
         verticalArrangement = Arrangement.Top
     ) {
         if (!isLoggedIn) {
-            // Email Input
+            // Login Form
             OutlinedTextField(
                 value = email,
-                onValueChange = { accountScreenViewModel.email.value = it },
+                onValueChange = { email = it },
                 label = { Text("Email") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier
@@ -56,15 +59,14 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
                     .padding(bottom = 8.dp)
             )
 
-            // Password Input
             OutlinedTextField(
                 value = password,
-                onValueChange = { accountScreenViewModel.password.value = it },
+                onValueChange = { password = it },
                 label = { Text("Password") },
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = {
-                        accountScreenViewModel.isPasswordVisible.value = !isPasswordVisible
+                        isPasswordVisible = !isPasswordVisible
                     }) {
                         Icon(
                             imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
@@ -78,18 +80,11 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
                     .padding(bottom = 16.dp)
             )
 
-            // Error Message
-            if (errorMessage != null) {
-                Text(
-                    text = errorMessage ?: "",
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-            }
-
             // Login Button
             Button(
-                onClick = { accountScreenViewModel.loginUser() },
+                onClick = {
+                    userStateViewModel.login(email, password)
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Login")
@@ -104,7 +99,7 @@ fun AccountScreen(accountScreenViewModel: AccountScreenViewModel = viewModel()) 
 
             Button(
                 onClick = {
-                    accountScreenViewModel.logoutUser()
+                    userStateViewModel.logout()
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

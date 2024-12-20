@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -31,16 +32,17 @@ import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
 import com.example.torontorenthomecompose.ui.screen.ListScreen
 import com.example.torontorenthomecompose.ui.screen.MapScreen
+import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 class MainActivity : ComponentActivity() {
+    private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Add data to the db
-        val houseOperations = HouseOperations(this)
-        // houseOperations.generateRandomHousesAndUpload()
         setContent {
-            MyApp()
+            MyApp(userStateViewModel) // Pass it to MyApp
         }
+
         if (!isLocationPermissionGranted()) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
         }
@@ -55,13 +57,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyApp() {
+fun MyApp(userStateViewModel: UserStateViewModel) {
     val navController = rememberNavController()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController) }
     ) { innerPadding ->
-        NavHostContainer(navController, Modifier.padding(innerPadding))
+        NavHostContainer(navController, Modifier.padding(innerPadding),userStateViewModel)
     }
 }
 
@@ -96,12 +98,16 @@ fun BottomNavigationBar(navController: NavHostController) {
 }
 
 @Composable
-fun NavHostContainer(navController: NavHostController, modifier: Modifier) {
+fun NavHostContainer(
+    navController: NavHostController,
+    modifier: Modifier,
+    userStateViewModel: UserStateViewModel
+) {
     NavHost(navController = navController, startDestination = Routes.MAP, modifier = modifier) {
         composable(Routes.MAP) { MapScreen() }
-        composable(Routes.LIST) { ListScreen() }
-        composable(Routes.FAVORITES) { FavoriteScreen() }
-        composable(Routes.ACCOUNT) { AccountScreen() } // Pass navController
+        composable(Routes.LIST) { ListScreen(userStateViewModel) }
+        composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
+        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel) } // Pass navController
     }
 }
 
