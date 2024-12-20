@@ -1,9 +1,9 @@
 package com.example.torontorenthomecompose.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,11 +29,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 @Composable
 fun SignUpScreen(
     onBackClick: () -> Unit,
-    onSignUpClick: (String, String, String, String) -> Unit = { _, _, _, _ -> }
+    navController: NavHostController
 ) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -114,6 +118,7 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
+
             OutlinedTextField(
                 value = reEnterPassword,
                 onValueChange = { reEnterPassword = it },
@@ -135,7 +140,47 @@ fun SignUpScreen(
 
             // Sign-Up Button
             Button(
-                onClick = { onSignUpClick(firstName, lastName, email, password) },
+                onClick = {
+                    if (password == reEnterPassword) {
+                        // Call Firebase Auth to create a user
+                        val auth = FirebaseAuth.getInstance()
+                        val firestore = FirebaseFirestore.getInstance()
+
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val userId = task.result?.user?.uid
+                                    if (userId != null) {
+                                        // Save additional user details to Firestore
+                                        val user = hashMapOf(
+                                            "firstName" to firstName,
+                                            "lastName" to lastName,
+                                            "email" to email,
+                                            "userId" to userId,
+                                            "favoriteHouseIds" to emptyList<String>()
+                                        )
+                                        firestore.collection("buyers").document(userId)
+                                            .set(user)
+                                            .addOnSuccessListener {
+                                                Log.d("SignUpScreen", "User registered successfully")
+                                                navController.navigate("account")
+                                                // Navigate to next screen or show success
+                                            }
+                                            .addOnFailureListener { e ->
+                                                Log.d("SignUpScreen", "Firestore Error: ${e.message}")
+                                                // Show error to the user
+                                            }
+                                    }
+                                } else {
+                                    Log.d("SignUpScreen", "Auth Error: ${task.exception?.message}")
+                                    // Show error to the user
+                                }
+                            }
+                    } else {
+                        Log.d("SignUpScreen", "Passwords do not match")
+                        // Show error to the user (e.g., Snackbar or Toast)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Sign Up")

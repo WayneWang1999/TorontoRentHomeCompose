@@ -111,9 +111,7 @@ fun NavHostContainer(
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
         composable(Routes.SIGNUP){ SignUpScreen(
             onBackClick = { navController.popBackStack() },
-            onSignUpClick = { firstName, lastName, email, password ->
-                // Handle sign-up logic
-            }
+            navController
         )} // Pass navController
     }
 }
