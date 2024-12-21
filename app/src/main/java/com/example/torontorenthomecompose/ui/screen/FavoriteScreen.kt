@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.FavoriteScreenViewModel
-import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 

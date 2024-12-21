@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.torontorenthome.util.HouseOperations
 import com.example.torontorenthomecompose.ui.screen.AccountScreen
+import com.example.torontorenthomecompose.ui.screen.DetailScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
 import com.example.torontorenthomecompose.ui.screen.FilterScreen
 import com.example.torontorenthomecompose.ui.screen.ListScreen
@@ -65,7 +66,7 @@ fun MyApp(userStateViewModel: UserStateViewModel) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute !in listOf(Routes.FILTER)) {
+            if (currentRoute !in listOf(Routes.FILTER,Routes.DETAIL))  {
                 BottomNavigationBar(navController)
             }
         }
@@ -119,9 +120,14 @@ fun NavHostContainer(
         composable(Routes.LIST) {
             ListScreen(
                 userStateViewModel,
-                onFilterClick = { navController.navigate("filter") }
+                onFilterClick = { navController.navigate("filter") },
+                onItemClick = {navController.navigate("detail")}
+
         ) }
         composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
+        composable(Routes.DETAIL) { DetailScreen(
+            onBackClick = { navController.popBackStack() },
+        ) }
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
         composable(Routes.FILTER) {
             FilterScreen(
@@ -171,4 +177,5 @@ object Routes {
     const val ACCOUNT = "account"
     const val SIGNUP="signup"
     const val FILTER="filter"
+    const val DETAIL="detail"
 }
