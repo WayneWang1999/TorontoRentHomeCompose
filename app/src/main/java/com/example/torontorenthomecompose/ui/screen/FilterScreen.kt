@@ -16,6 +16,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,19 +26,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.torontorenthomecompose.models.Filters
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
 fun FilterScreen(
+    userStateViewModel: UserStateViewModel,
     onApplyFilters: (priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) -> Unit,
     onBackClick: () -> Unit,
     onClearFilters:()-> Unit,
 ) {
-    var minPrice by remember { mutableStateOf("") }
-    var maxPrice by remember { mutableStateOf("") }
-    var bedrooms by remember { mutableStateOf(1) }
-    var bathrooms by remember { mutableStateOf(1) }
-    var propertyType by remember { mutableStateOf("Apartment") }
+    // Collect filters from ViewModel as state
+    val currentFilters by userStateViewModel.filters.collectAsState()
+
+    // Initialize state variables with current filters
+    var minPrice by remember { mutableStateOf(currentFilters?.priceRange?.first?.toString() ?: "") }
+    var maxPrice by remember { mutableStateOf(currentFilters?.priceRange?.last?.toString() ?: "") }
+    var bedrooms by remember { mutableStateOf(currentFilters?.bedrooms ?: 1) }
+    var bathrooms by remember { mutableStateOf(currentFilters?.bathrooms ?: 1) }
+    var propertyType by remember { mutableStateOf(currentFilters?.propertyType ?: "Apartment") }
 
     val propertyTypes = listOf("Apartment", "House", "Townhouse", "Condo")
 
@@ -162,7 +169,8 @@ fun FilterScreen(
                 onClearFilters()
                 onBackClick() // Navigate back after clearing
             },
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             Text("Clear Filters")
         }

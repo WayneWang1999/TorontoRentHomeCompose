@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -130,25 +133,13 @@ fun MapScreen(
                     unfocusedLabelColor = Color.Gray // Label color when not focused
                 )
             )
+// Determine badge count based on filters
+            val badgeCount = if (filters != null) 1 else 0
 
-
-            // Filter Icon
-            Box(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(40.dp)
-                    .weight(0.15f)
-                    .clickable { onFilterClick() }
-                    .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_action_filter),
-                    contentDescription = "Filter",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+            FilterIconWithBadge(
+                onFilterClick = { onFilterClick() },
+                badgeCount = badgeCount
+            )
         }
 
 
@@ -212,4 +203,39 @@ fun MapScreen(
 
     }
 
+}
+
+@Composable
+fun FilterIconWithBadge(onFilterClick: () -> Unit, badgeCount: Int) {
+    Box(
+        modifier = Modifier
+            .padding(end = 16.dp)
+            .size(40.dp)
+            .clickable { onFilterClick() }
+            .background(Color(0xFF1565C0), shape = CircleShape), // Circular button with blue background
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_action_filter),
+            contentDescription = "Filter",
+            tint = Color.White,
+            modifier = Modifier.size(24.dp)
+        )
+
+        // Show badge only if badgeCount > 0
+        if (badgeCount > 0) {
+            Badge(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(x = 8.dp, y = (-4).dp),
+                containerColor = Color.Red
+            ) {
+                Text(
+                    text = badgeCount.toString(),
+                    color = Color.White,
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
 }

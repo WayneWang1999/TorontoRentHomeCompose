@@ -125,6 +125,7 @@ fun NavHostContainer(
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
         composable(Routes.FILTER) {
             FilterScreen(
+                userStateViewModel,// Pass the current filters
                 onBackClick = { navController.popBackStack() },
                 onApplyFilters = { priceRange, bedrooms, bathrooms, propertyType ->
                     // Pass the filters to a shared ViewModel or state

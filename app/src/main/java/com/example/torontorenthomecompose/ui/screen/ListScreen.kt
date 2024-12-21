@@ -119,22 +119,29 @@ fun ListScreen(
                     unfocusedLabelColor = Color.Gray // Label color when not focused
                 )
             )
-            Box(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .size(40.dp)
-                    .weight(0.15f)
-                    .clickable { onFilterClick() }
-                    .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_action_filter),
-                    contentDescription = "Filter",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+
+            val badgeCount = if (filters != null) 1 else 0
+
+            FilterIconWithBadge(
+                onFilterClick = { onFilterClick() },
+                badgeCount = badgeCount
+            )
+//            Box(
+//                modifier = Modifier
+//                    .padding(end = 16.dp)
+//                    .size(40.dp)
+//                    .weight(0.15f)
+//                    .clickable { onFilterClick() }
+//                    .background(Color(0xFF1565C0), shape = androidx.compose.foundation.shape.CircleShape), // Circular button with blue background
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.ic_action_filter),
+//                    contentDescription = "Filter",
+//                    tint = Color.White,
+//                    modifier = Modifier.size(24.dp)
+//                )
+//            }
         }
 
 
