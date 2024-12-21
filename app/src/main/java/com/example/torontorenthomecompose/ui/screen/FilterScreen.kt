@@ -25,11 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
 fun FilterScreen(
-    //onApplyFilters: (priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) -> Unit,
-    onBackClick: () -> Unit
+    onApplyFilters: (priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) -> Unit,
+    onBackClick: () -> Unit,
+    onClearFilters:()-> Unit,
 ) {
     var minPrice by remember { mutableStateOf("") }
     var maxPrice by remember { mutableStateOf("") }
@@ -148,11 +150,22 @@ fun FilterScreen(
             onClick = {
                 val min = minPrice.toIntOrNull() ?: 0
                 val max = maxPrice.toIntOrNull() ?: Int.MAX_VALUE
-               // onApplyFilters(min..max, bedrooms, bathrooms, propertyType)
+                 onApplyFilters(min..max, bedrooms, bathrooms, propertyType)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Apply Filters")
         }
+
+        Button(
+            onClick = {
+                onClearFilters()
+                onBackClick() // Navigate back after clearing
+            },
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text("Clear Filters")
+        }
+
     }
 }

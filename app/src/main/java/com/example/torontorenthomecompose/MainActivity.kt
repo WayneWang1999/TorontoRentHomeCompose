@@ -111,16 +111,34 @@ fun NavHostContainer(
     userStateViewModel: UserStateViewModel
 ) {
     NavHost(navController = navController, startDestination = Routes.MAP, modifier = modifier) {
-        composable(Routes.MAP) { MapScreen(userStateViewModel,
-            onFilterClick = { navController.navigate("filter") }
+        composable(Routes.MAP) {
+            MapScreen(
+                userStateViewModel,
+                onFilterClick = { navController.navigate("filter") }
         ) }
-        composable(Routes.LIST) { ListScreen(userStateViewModel,
-            onFilterClick = { navController.navigate("filter") }
+        composable(Routes.LIST) {
+            ListScreen(
+                userStateViewModel,
+                onFilterClick = { navController.navigate("filter") }
         ) }
         composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
         composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
-        composable(Routes.FILTER) { FilterScreen(
-            onBackClick = { navController.popBackStack() }
+        composable(Routes.FILTER) {
+            FilterScreen(
+                onBackClick = { navController.popBackStack() },
+                onApplyFilters = { priceRange, bedrooms, bathrooms, propertyType ->
+                    // Pass the filters to a shared ViewModel or state
+                    userStateViewModel.applyFilters(
+                        priceRange = priceRange,
+                        bedrooms = bedrooms,
+                        bathrooms = bathrooms,
+                        propertyType = propertyType
+                    )
+                    navController.popBackStack() // Navigate back after applying filters
+                },
+                onClearFilters={
+                    userStateViewModel.clearFilters()
+                }
         ) }
         composable(Routes.SIGNUP){ SignUpScreen(
             onBackClick = { navController.popBackStack() },

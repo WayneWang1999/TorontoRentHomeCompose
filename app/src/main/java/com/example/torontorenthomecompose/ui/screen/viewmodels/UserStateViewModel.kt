@@ -2,6 +2,7 @@ package com.example.torontorenthomecompose.ui.screen.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.torontorenthomecompose.models.Filters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,6 +26,23 @@ class UserStateViewModel : ViewModel() {
     // User's favorite house IDs
     private val _favoriteHouseIds = MutableStateFlow<Set<String>>(emptySet())
     val favoriteHouseIds: StateFlow<Set<String>> = _favoriteHouseIds
+
+    private val _filters = MutableStateFlow<Filters?>(null)
+    val filters: StateFlow<Filters?> get() = _filters
+
+    fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
+        _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
+    }
+
+    // Set filters
+    fun setFilters(newFilters: Filters) {
+        _filters.value = newFilters
+    }
+
+    // Clear filters
+    fun clearFilters() {
+        _filters.value = null
+    }
 
     init {
         val user = auth.currentUser
@@ -99,4 +117,6 @@ class UserStateViewModel : ViewModel() {
         _isLoggedIn.value = false
         _userEmail.value = null
     }
+
+
 }

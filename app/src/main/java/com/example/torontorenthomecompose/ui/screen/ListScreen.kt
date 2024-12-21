@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,11 +57,27 @@ fun ListScreen(
 
     // Search query state
     var searchQuery by remember { mutableStateOf("") }
-    val filteredHouses = if (searchQuery.isBlank()) {
-        houseList
-    } else {
+
+// Filters from the UserStateViewModel
+    val filters by userStateViewModel.filters.collectAsState()
+
+// Apply both search query and filters
+    val filteredHouses = remember(searchQuery, filters,houseList) {
         houseList.filter { house ->
-            house.address.contains(searchQuery, ignoreCase = true)
+            val matchesSearchQuery = searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
+            val matchesFilters = filters?.let {
+                house.price in it.priceRange &&
+                        house.bedrooms >= it.bedrooms &&
+                        house.bathrooms >= it.bathrooms
+            } ?: true // Show all houses if filters are null
+
+            matchesSearchQuery && matchesFilters
+        }.also {
+            if (filters == null && searchQuery.isBlank()) {
+                Log.d("FilteredHouses", "No filters or search query applied. Showing all houses.")
+            } else {
+                Log.d("FilteredHouses", "Search query: '$searchQuery', Filters: $filters")
+            }
         }
     }
 
