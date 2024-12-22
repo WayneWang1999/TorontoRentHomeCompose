@@ -24,7 +24,9 @@ class FavoriteScreenViewModel(
     private val _houseList = MutableStateFlow<List<House>>(emptyList())
     val houseList: StateFlow<List<House>> = _houseList
 
-      private val _favoriteHouseIds = userStateViewModel.favoriteHouseIds
+
+
+    private val _favoriteHouseIds = userStateViewModel.favoriteHouseIds
 
     val favoriteHouses: StateFlow<List<House>> = _houseList
         .combine(_favoriteHouseIds) { houses, favoriteIds ->
@@ -42,10 +44,10 @@ class FavoriteScreenViewModel(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-
         fetchHouses()
-
     }
+
+
     private fun fetchHouses() {
         viewModelScope.launch {
             _isLoading.value = true

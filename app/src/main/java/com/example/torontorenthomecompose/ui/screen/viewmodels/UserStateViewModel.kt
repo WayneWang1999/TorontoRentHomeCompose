@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.ui.screen.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.torontorenthomecompose.ui.screen.models.Filters
@@ -13,21 +14,23 @@ import kotlinx.coroutines.tasks.await
 
 class UserStateViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+
     // StateFlow to track if the user is logged in
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
+
     // StateFlow to store the user's email
     private val _userEmail = MutableStateFlow<String?>(null)
     val userEmail: StateFlow<String?> = _userEmail
 
+    private val _currentUser = MutableStateFlow<FirebaseUser?>(auth.currentUser)
+    val currentUser: StateFlow<FirebaseUser?> = _currentUser
+
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
-
-    // Expose current user to other ViewModels
-    val currentUser: FirebaseUser?
-        get() = auth.currentUser
 
     // User's favorite house IDs
     private val _favoriteHouseIds = MutableStateFlow<Set<String>>(emptySet())
@@ -53,8 +56,10 @@ class UserStateViewModel : ViewModel() {
     init {
         val user = auth.currentUser
         _isLoggedIn.value = user != null
-        _userEmail.value = user?.email // Set email if user is already logged in
+        _userEmail.value = user?.email
+        _currentUser.value = user // Set initial user
         if (user != null) {
+            Log.d("currentUser", "${user.email}")
             fetchFavorites(user.uid)
         }
     }
@@ -86,12 +91,11 @@ class UserStateViewModel : ViewModel() {
             }
             _favoriteHouseIds.value = currentFavorites
 
-            val user = auth.currentUser
-            user?.let {
+            _currentUser.value?.let { user ->
                 try {
                     FirebaseFirestore.getInstance()
                         .collection("buyers")
-                        .document(it.uid)
+                        .document(user.uid)
                         .update("favoriteHouseIds", currentFavorites.toList())
                         .await()
                 } catch (e: Exception) {
@@ -106,25 +110,32 @@ class UserStateViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val user = auth.currentUser
                     _isLoggedIn.value = true
-                    _userEmail.value = email
-                    _errorMessage.value=" "
+                    _userEmail.value = user?.email
+                    _currentUser.value = user // Update current user
+                    _errorMessage.value = ""
 
+                    user?.let {
+                        fetchFavorites(it.uid)
+                    }
                 } else {
-                    // Handle login failure (can add a state for error messages)
                     _isLoggedIn.value = false
                     _userEmail.value = null
-                    _errorMessage.value="Email or Password not correct!!!"
-
+                    _currentUser.value = null // Clear current user
+                    _errorMessage.value = "Email or Password not correct!!!"
                 }
             }
     }
+
     // Logout function
     fun logout() {
         auth.signOut()
         _isLoggedIn.value = false
         _userEmail.value = null
+        _currentUser.value = null // Clear current user
+        _favoriteHouseIds.value = emptySet() // Clear favorites
+        _filters.value = null // Clear filters if applicable
     }
-
-
 }
+

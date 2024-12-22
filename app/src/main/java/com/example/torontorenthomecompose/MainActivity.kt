@@ -169,7 +169,7 @@ fun NavHostContainer(
                 onBackClick = { navController.popBackStack() },
                 navController
             )
-        } // Pass navController
+        }
 
     }
 }

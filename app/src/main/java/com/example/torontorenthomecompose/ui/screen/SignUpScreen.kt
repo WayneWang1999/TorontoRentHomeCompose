@@ -46,6 +46,12 @@ fun SignUpScreen(
     var reEnterPassword by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
+    var firstNameError by remember { mutableStateOf("") }
+    var lastNameError by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf("") }
+    var reEnterPasswordError by remember { mutableStateOf("") }
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Back Button
         IconButton(
@@ -70,40 +76,67 @@ fun SignUpScreen(
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            // Name Inputs
+            // First Name Input
             OutlinedTextField(
                 value = firstName,
-                onValueChange = { firstName = it },
+                onValueChange = {
+                    firstName = it
+                    firstNameError = if (it.isBlank()) "First name cannot be empty" else ""
+                },
                 label = { Text("First Name") },
+                isError = firstNameError.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
+            if (firstNameError.isNotBlank()) {
+                Text(text = firstNameError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+            }
+
+            // Last Name Input
             OutlinedTextField(
                 value = lastName,
-                onValueChange = { lastName = it },
+                onValueChange = {
+                    lastName = it
+                    lastNameError = if (it.isBlank()) "Last name cannot be empty" else ""
+                },
                 label = { Text("Last Name") },
+                isError = lastNameError.isNotBlank(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
+            if (lastNameError.isNotBlank()) {
+                Text(text = lastNameError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+            }
 
             // Email Input
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = {
+                    email = it
+                    emailError = if (it.isBlank()) "Email cannot be empty" else ""
+                },
                 label = { Text("Email") },
+                isError = emailError.isNotBlank(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
+            if (emailError.isNotBlank()) {
+                Text(text = emailError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+            }
 
-            // Password Inputs
+            // Password Input
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    passwordError = if (it.isBlank()) "Password cannot be empty" else ""
+                },
                 label = { Text("Password") },
+                isError = passwordError.isNotBlank(),
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
@@ -116,13 +149,25 @@ fun SignUpScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
+            if (passwordError.isNotBlank()) {
+                Text(text = passwordError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+            }
 
+            // Re-enter Password Input
             OutlinedTextField(
                 value = reEnterPassword,
-                onValueChange = { reEnterPassword = it },
+                onValueChange = {
+                    reEnterPassword = it
+                    reEnterPasswordError = if (it.isBlank()) {
+                        "Re-enter password cannot be empty"
+                    } else if (it != password) {
+                        "Passwords do not match"
+                    } else ""
+                },
                 label = { Text("Re-enter Password") },
+                isError = reEnterPasswordError.isNotBlank(),
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
@@ -137,11 +182,23 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .padding(bottom = 24.dp)
             )
+            if (reEnterPasswordError.isNotBlank()) {
+                Text(text = reEnterPasswordError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+            }
 
             // Sign-Up Button
             Button(
                 onClick = {
-                    if (password == reEnterPassword) {
+                    if (firstName.isBlank()) firstNameError = "First name cannot be empty"
+                    if (lastName.isBlank()) lastNameError = "Last name cannot be empty"
+                    if (email.isBlank()) emailError = "Email cannot be empty"
+                    if (password.isBlank()) passwordError = "Password cannot be empty"
+                    if (reEnterPassword.isBlank()) reEnterPasswordError = "Re-enter password cannot be empty"
+                    if (password != reEnterPassword) reEnterPasswordError = "Passwords do not match"
+
+                    if (firstNameError.isBlank() && lastNameError.isBlank() &&
+                        emailError.isBlank() && passwordError.isBlank() && reEnterPasswordError.isBlank()
+                    ) {
                         // Call Firebase Auth to create a user
                         val auth = FirebaseAuth.getInstance()
                         val firestore = FirebaseFirestore.getInstance()
@@ -177,7 +234,7 @@ fun SignUpScreen(
                                 }
                             }
                     } else {
-                        Log.d("SignUpScreen", "Passwords do not match")
+                        Log.d("SignUpScreen", "there is a error input")
                         // Show error to the user (e.g., Snackbar or Toast)
                     }
                 },
@@ -188,3 +245,4 @@ fun SignUpScreen(
         }
     }
 }
+
