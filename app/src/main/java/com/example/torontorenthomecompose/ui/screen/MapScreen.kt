@@ -36,6 +36,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.R
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.MapScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 import com.google.android.gms.maps.model.CameraPosition
@@ -187,7 +188,7 @@ fun MapScreen(
                         false
                     }
                     Box(modifier = Modifier.clickable {
-                        navController.navigate("detail/${house.houseId}")
+                        navController.navigate(Routes.Detail(house.houseId).route)
                     }){
                     HouseItem(
                         houseId=house.houseId,

@@ -1,10 +1,11 @@
 package com.example.torontorenthomecompose.ui.screen
 
-import android.util.Log
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.torontorenthome.models.House
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.FavoriteScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
@@ -32,43 +35,78 @@ fun FavoriteScreen(
             }
         }
     )
-   // val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel()
     val houseList = favoriteScreenViewModel.favoriteHouses.collectAsState()
-    val isLoading = favoriteScreenViewModel.isLoading.collectAsState()
+    val isLoading by favoriteScreenViewModel.isLoading.collectAsState()
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
-    if(isLoggedIn){
-        if (isLoading.value) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Loading...", fontSize = 20.sp)
-            }
-        } else {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(houseList.value.size) { index ->
-                    val house = houseList.value[index]
-                    Box(modifier = Modifier.clickable {
-                        navController.navigate("detail/${house.houseId}")
-                    }){
-                    HouseItem(
-                        houseId=house.houseId,
-                        imageUrl = house.imageUrl,
-                        price = house.price,
-                        bedrooms = house.bedrooms,
-                        address = house.address,
-                        bathrooms = house.bathrooms,
-                        area = house.area,
-                        createTime = house.createTime,
 
-                        onFavoriteClick = { houseId ->
-                            userStateViewModel.toggleFavorite(houseId) },
-                        isFavorite = true
-                    )}
+    if (isLoggedIn) {
+        when {
+            isLoading -> LoadingIndicator()
+            houseList.value.isEmpty() -> EmptyFavoritesMessage()
+            else -> HouseList(
+                houses = houseList.value,
+                onHouseClick = { houseId ->
+                    navController.navigate(Routes.Detail(houseId).route)
+                },
+                onFavoriteToggle = { houseId ->
+                    userStateViewModel.toggleFavorite(houseId)
                 }
+            )
+        }
+    } else {
+        LoggedOutMessage()
+    }
+}
+
+@Composable
+fun LoadingIndicator() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun EmptyFavoritesMessage() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "No favorite houses found.", fontSize = 16.sp)
+    }
+}
+
+@Composable
+fun LoggedOutMessage() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(
+            text = "Please go to Account log in to view your favorite houses.",
+            fontSize = 16.sp,
+        )
+    }
+}
+
+@Composable
+fun HouseList(
+    houses: List<House>,
+    onHouseClick: (String) -> Unit,
+    onFavoriteToggle: (String) -> Unit
+) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(houses.size) { index ->
+            val house = houses[index]
+            Box(
+                modifier = Modifier.clickable { onHouseClick(house.houseId) }
+            ) {
+                HouseItem(
+                    houseId = house.houseId,
+                    imageUrl = house.imageUrl,
+                    price = house.price,
+                    bedrooms = house.bedrooms,
+                    address = house.address,
+                    bathrooms = house.bathrooms,
+                    area = house.area,
+                    createTime = house.createTime,
+                    onFavoriteClick = onFavoriteToggle,
+                    isFavorite = true
+                )
             }
         }
-
-    }else{
-        Log.d("UserLogin","User logout")
-
     }
-
 }

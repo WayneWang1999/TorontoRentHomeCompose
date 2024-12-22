@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -29,6 +30,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
@@ -127,7 +129,8 @@ fun ListScreen(
 
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Loading...", fontSize = 20.sp)
+                CircularProgressIndicator()
+                //Text(text = "Loading...", fontSize = 20.sp)
             }
         } else {
             LazyColumn(
@@ -141,7 +144,7 @@ fun ListScreen(
                         false
                     }
                     Box(modifier = Modifier.clickable {
-                        navController.navigate("detail/${house.houseId}")
+                        navController.navigate(Routes.Detail(house.houseId).route)
                     })
                     {HouseItem(
                         houseId = house.houseId,

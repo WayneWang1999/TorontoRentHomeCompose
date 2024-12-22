@@ -2,7 +2,7 @@ package com.example.torontorenthomecompose.ui.screen.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.torontorenthomecompose.models.Filters
+import com.example.torontorenthomecompose.ui.screen.models.Filters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,6 +19,12 @@ class UserStateViewModel : ViewModel() {
     // StateFlow to store the user's email
     private val _userEmail = MutableStateFlow<String?>(null)
     val userEmail: StateFlow<String?> = _userEmail
+
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     // Expose current user to other ViewModels
     val currentUser: FirebaseUser?
         get() = auth.currentUser

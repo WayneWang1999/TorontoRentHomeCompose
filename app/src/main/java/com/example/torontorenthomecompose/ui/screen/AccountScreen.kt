@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
@@ -38,14 +39,16 @@ fun AccountScreen(
     userStateViewModel: UserStateViewModel,
     navController: NavHostController
 ) {
-    // UserStateViewModel State
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val userEmail by userStateViewModel.userEmail.collectAsState()
+    val errorMessage by userStateViewModel.errorMessage.collectAsState()
+    val isLoading by userStateViewModel.isLoading.collectAsState()
 
-    // Local states for email and password input
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var passwordError by remember { mutableStateOf<String?>(null) }
 
     Column(
         modifier = Modifier
@@ -54,78 +57,152 @@ fun AccountScreen(
         verticalArrangement = Arrangement.Top
     ) {
         if (!isLoggedIn) {
-            // Login Form
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp)
-            )
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
 
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                trailingIcon = {
-                    IconButton(onClick = {
-                        isPasswordVisible = !isPasswordVisible
-                    }) {
-                        Icon(
-                            imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = null
-                        )
+            LoginForm(
+                email = email,
+                password = password,
+                isPasswordVisible = isPasswordVisible,
+                emailError = emailError,
+                passwordError = passwordError,
+                onEmailChange = {
+                    email = it
+                    emailError = null
+                },
+                onPasswordChange = {
+                    password = it
+                    passwordError = null
+                },
+                onPasswordVisibilityToggle = { isPasswordVisible = !isPasswordVisible },
+                onLoginClick = {
+                    if (email.isBlank()) {
+                        emailError = "Email cannot be empty"
+                    } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        emailError = "Invalid email address"
+                    } else if (password.isBlank()) {
+                        passwordError = "Password cannot be empty"
+                    } else {
+                        userStateViewModel.login(email, password)
                     }
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                onSignUpClick = { navController.navigate(Routes.SignUp.route) }
             )
 
-            // Login Button
-            Button(
-                onClick = {
-                    userStateViewModel.login(email, password)
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Sign In")
+            if (isLoading) {
+                LoadingIndicator()
             }
-            Text(
-                text = "Create an account",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF718BD0), // Add a color (blue)
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 16.dp)
-                    .clickable {
-                        navController.navigate("signup")
-                        //open a new screen
-                    },
-                textAlign = TextAlign.Center
-
-            )
         } else {
-            // Logged-In UI
-            Text(
-                text = "Welcome, $userEmail!",
-                fontSize = 24.sp,
-                modifier = Modifier.padding(bottom = 16.dp)
+            LoggedInUI(
+                userEmail = userEmail ?: "Guest",
+                onLogoutClick = { userStateViewModel.logout() }
             )
-
-            Button(
-                onClick = {
-                    userStateViewModel.logout()
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Logout")
-            }
         }
     }
 }
+
+@Composable
+fun LoginForm(
+    email: String,
+    password: String,
+    isPasswordVisible: Boolean,
+    emailError: String?,
+    passwordError: String?,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onPasswordVisibilityToggle: () -> Unit,
+    onLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit
+) {
+    Column {
+        OutlinedTextField(
+            value = email,
+            onValueChange = onEmailChange,
+            label = { Text("Email") },
+            isError = emailError != null,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+        )
+        if (emailError != null) {
+            Text(
+                text = emailError,
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = onPasswordChange,
+            label = { Text("Password") },
+            isError = passwordError != null,
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = onPasswordVisibilityToggle) {
+                    Icon(
+                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                        contentDescription = "Toggle password visibility"
+                    )
+                }
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+        )
+        if (passwordError != null) {
+            Text(
+                text = passwordError,
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
+
+        Button(
+            onClick = onLoginClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Sign In")
+        }
+
+        Text(
+            text = "Create an account",
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF718BD0),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .clickable(onClick = onSignUpClick),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+@Composable
+fun LoggedInUI(
+    userEmail: String,
+    onLogoutClick: () -> Unit
+) {
+    Text(
+        text = "Welcome, $userEmail!",
+        fontSize = 24.sp,
+        modifier = Modifier.padding(bottom = 16.dp)
+    )
+
+    Button(
+        onClick = onLogoutClick,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text("Logout")
+    }
+}
+

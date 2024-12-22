@@ -35,8 +35,12 @@ class FavoriteScreenViewModel(
             initialValue = emptyList()
         )
 
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
+
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
+
     init {
 
         fetchHouses()

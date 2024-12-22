@@ -1,4 +1,4 @@
-package com.example.torontorenthomecompose.models
+package com.example.torontorenthomecompose.ui.screen.models
 
 data class Filters(
     val priceRange: IntRange,

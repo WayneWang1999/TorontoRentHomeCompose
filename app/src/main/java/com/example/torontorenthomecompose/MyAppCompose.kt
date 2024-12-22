@@ -6,7 +6,7 @@ import com.example.torontorenthome.data.HouseDatabase
 import com.google.firebase.FirebaseApp
 
 class MyAppCompose : Application() {
-    lateinit var database: HouseDatabase
+     lateinit var database: HouseDatabase
         private set
 
     override fun onCreate() {

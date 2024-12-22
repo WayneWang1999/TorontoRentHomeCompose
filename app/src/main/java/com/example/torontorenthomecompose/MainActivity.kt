@@ -8,9 +8,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -20,14 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.torontorenthome.util.HouseOperations
 import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.DetailScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
@@ -35,6 +33,8 @@ import com.example.torontorenthomecompose.ui.screen.FilterScreen
 import com.example.torontorenthomecompose.ui.screen.ListScreen
 import com.example.torontorenthomecompose.ui.screen.MapScreen
 import com.example.torontorenthomecompose.ui.screen.SignUpScreen
+import com.example.torontorenthomecompose.ui.screen.models.BottomNavItem
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 class MainActivity : ComponentActivity() {
@@ -65,8 +65,10 @@ fun MyApp(userStateViewModel: UserStateViewModel) {
     val currentRoute = currentRoute(navController)
 
     Scaffold(
+        //Note:The BottomNavigationBar adjusts its visibility based on the current route
+        // (FILTER and DETAIL screens do not show it). This provides a better user experience.
         bottomBar = {
-            if (currentRoute !in listOf(Routes.FILTER, Routes.DETAIL)) {
+            if (currentRoute !in listOf(Routes.Filter.route) && !isDetailRoute(currentRoute)) {
                 BottomNavigationBar(navController)
             }
         }
@@ -75,22 +77,15 @@ fun MyApp(userStateViewModel: UserStateViewModel) {
     }
 }
 
-data class BottomNavItem(
-    val route: String,
-    val icon: ImageVector,
-    val label: String
-)
-
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
     val currentRoute = currentRoute(navController)
-
     // List of navigation items
     val navItems = listOf(
-        BottomNavItem(Routes.MAP, Icons.Filled.LocationOn, "Map"),
-        BottomNavItem(Routes.LIST, Icons.Filled.List, "List"),
-        BottomNavItem(Routes.FAVORITES, Icons.Filled.Favorite, "Favorites"),
-        BottomNavItem(Routes.ACCOUNT, Icons.Filled.AccountCircle, "Account")
+        BottomNavItem(Routes.Map.route, Icons.Filled.LocationOn, "Map"),
+        BottomNavItem(Routes.ListHouse.route, Icons.AutoMirrored.Filled.List, "List"),
+        BottomNavItem(Routes.Favorites.route, Icons.Filled.Favorite, "Favorites"),
+        BottomNavItem(Routes.Account.route, Icons.Filled.AccountCircle, "Account")
     )
 
     NavigationBar {
@@ -111,15 +106,15 @@ fun NavHostContainer(
     modifier: Modifier,
     userStateViewModel: UserStateViewModel
 ) {
-    NavHost(navController = navController, startDestination = Routes.MAP, modifier = modifier) {
-        composable(Routes.MAP) {
+    NavHost(navController = navController, startDestination = Routes.Map.route, modifier = modifier) {
+        composable(Routes.Map.route) {
             MapScreen(
                 userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
                 navController
             )
         }
-        composable(Routes.LIST) {
+        composable(Routes.ListHouse.route) {
             ListScreen(
                 userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
@@ -127,34 +122,35 @@ fun NavHostContainer(
             )
         }
 
-        composable(Routes.FAVORITES) {
+        composable(Routes.Favorites.route) {
             FavoriteScreen(
                 userStateViewModel,
                 navController
             )
         }
+        composable(Routes.Account.route) {
+            AccountScreen(
+                userStateViewModel,
+                navController
+            )
+        }
 
-//        composable(Routes.DETAIL) { DetailScreen(
-//            onBackClick = { navController.popBackStack() },
-//        ) }
-
-        composable("detail/{houseId}") { backStackEntry ->
+//Note:   implemented a dynamic route for the DetailScreen by using detail/{houseId}
+//        and extracting houseId from backStackEntry.arguments.
+        composable(Routes.Detail.route) { backStackEntry ->
             val houseId = backStackEntry.arguments?.getString("houseId")
             DetailScreen(
                 onBackClick = { navController.popBackStack() },
                 houseId = houseId
             )
-
         }
 
-
-        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel, navController) }
-        composable(Routes.FILTER) {
+        composable(Routes.Filter.route) {
             FilterScreen(
                 userStateViewModel,// Pass the current filters
                 onBackClick = { navController.popBackStack() },
                 onApplyFilters = { priceRange, bedrooms, bathrooms, propertyType ->
-                    // Pass the filters to a shared ViewModel or state
+                    // Pass the filters to a shared ViewModel
                     userStateViewModel.applyFilters(
                         priceRange = priceRange,
                         bedrooms = bedrooms,
@@ -168,12 +164,13 @@ fun NavHostContainer(
                 }
             )
         }
-        composable(Routes.SIGNUP) {
+        composable(Routes.SignUp.route) {
             SignUpScreen(
                 onBackClick = { navController.popBackStack() },
                 navController
             )
         } // Pass navController
+
     }
 }
 
@@ -192,13 +189,7 @@ fun currentRoute(navController: NavHostController): String? {
     return currentBackStackEntry?.destination?.route
 }
 
-
-object Routes {
-    const val MAP = "map"
-    const val LIST = "list"
-    const val FAVORITES = "favorites"
-    const val ACCOUNT = "account"
-    const val SIGNUP = "signup"
-    const val FILTER = "filter"
-    const val DETAIL = "detail/{houseId}"
+fun isDetailRoute(route: String?): Boolean {
+    return route?.startsWith("detail/") == true
 }
+
