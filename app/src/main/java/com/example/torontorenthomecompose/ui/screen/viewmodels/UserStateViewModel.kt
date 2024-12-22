@@ -108,11 +108,13 @@ class UserStateViewModel : ViewModel() {
                 if (task.isSuccessful) {
                     _isLoggedIn.value = true
                     _userEmail.value = email
+                    _errorMessage.value=" "
 
                 } else {
                     // Handle login failure (can add a state for error messages)
                     _isLoggedIn.value = false
                     _userEmail.value = null
+                    _errorMessage.value="Email or Password not correct!!!"
 
                 }
             }

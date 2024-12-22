@@ -39,11 +39,13 @@ fun AccountScreen(
     userStateViewModel: UserStateViewModel,
     navController: NavHostController
 ) {
+    //from the userState variable this userEmail is get from the firestore db and show in
+    //the after login UI
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val userEmail by userStateViewModel.userEmail.collectAsState()
     val errorMessage by userStateViewModel.errorMessage.collectAsState()
     val isLoading by userStateViewModel.isLoading.collectAsState()
-
+   // local variable
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
