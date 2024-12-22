@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -51,17 +50,18 @@ fun ListScreen(
             }
         }
     )
-
+    // variables from the userStateViewModel
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
+    val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()
+    val filters by userStateViewModel.filters.collectAsState()// Filters from the UserStateViewModel
+
+    // variables from the listScreenViewModel
+
     val houseList by listScreenViewModel.houseList.collectAsState()
     val isLoading by listScreenViewModel.isLoading.collectAsState()
-    val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()
 
-    // Search query state
-    var searchQuery by remember { mutableStateOf("") }
-
-// Filters from the UserStateViewModel
-    val filters by userStateViewModel.filters.collectAsState()
+    // Local variables
+    var searchQuery by remember { mutableStateOf("") }//Search query state
 
 // Apply both search query and filters
     val filteredHouses = remember(searchQuery, filters,houseList) {
@@ -134,7 +134,6 @@ fun ListScreen(
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
-                //Text(text = "Loading...", fontSize = 20.sp)
             }
         } else {
             LazyColumn(
@@ -163,7 +162,11 @@ fun ListScreen(
                     Box(
                         modifier = Modifier
                             .scale(scale.value) // Apply the scaling animation
-                            .clickable { navController.navigate(Routes.Detail(house.houseId).route) }
+                            .clickable {
+                                navController.navigate(Routes.Detail(house.houseId).route){
+                                    launchSingleTop = true
+                                }
+                            }
                             .padding(8.dp) // Add some padding for better spacing
                     ) {
                         HouseItem(

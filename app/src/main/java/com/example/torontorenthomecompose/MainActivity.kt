@@ -137,7 +137,7 @@ fun NavHostContainer(
 
 //Note:   implemented a dynamic route for the DetailScreen by using detail/{houseId}
 //        and extracting houseId from backStackEntry.arguments.
-        composable(Routes.Detail.route) { backStackEntry ->
+        composable(Routes.Detail.ROUTE) { backStackEntry ->
             val houseId = backStackEntry.arguments?.getString("houseId")
             DetailScreen(
                 onBackClick = { navController.popBackStack() },

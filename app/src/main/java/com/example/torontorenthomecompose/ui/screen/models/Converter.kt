@@ -1,4 +1,4 @@
-package com.example.torontorenthomecompose.data
+package com.example.torontorenthomecompose.ui.screen.models
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

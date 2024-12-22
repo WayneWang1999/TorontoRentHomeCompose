@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -138,7 +138,7 @@ fun HouseImagesPagerWithArrows(imageUrls: List<String>) {
                 .padding(start = 8.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Previous",
                 tint = Color.Black
             )
@@ -158,7 +158,8 @@ fun HouseImagesPagerWithArrows(imageUrls: List<String>) {
                 .padding(end = 8.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowForward,
+              //  imageVector = Icons.Default.ArrowForward,
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Next",
                 tint = Color.Black
             )

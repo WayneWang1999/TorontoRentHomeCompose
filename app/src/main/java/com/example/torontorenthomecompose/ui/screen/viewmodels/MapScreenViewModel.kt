@@ -68,6 +68,7 @@ class MapScreenViewModel(
                     }
                 }
                 _houseLocations.value = houses
+                _errorMessage.value = null // Clear error state
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to load house locations: ${e.message}"
             }

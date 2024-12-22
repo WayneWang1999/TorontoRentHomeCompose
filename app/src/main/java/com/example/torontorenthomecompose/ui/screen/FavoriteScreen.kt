@@ -50,7 +50,9 @@ fun FavoriteScreen(
             else -> HouseList(
                 houses = houseList.value,
                 onHouseClick = { houseId ->
-                    navController.navigate(Routes.Detail(houseId).route)
+                    navController.navigate(Routes.Detail(houseId).route) {
+                        launchSingleTop = true
+                    }
                 },
                 onFavoriteToggle = { houseId ->
                     userStateViewModel.toggleFavorite(houseId)

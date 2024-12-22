@@ -5,14 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -21,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,8 +42,8 @@ fun FilterScreen(
     // Initialize state variables with current filters
     var minPrice by remember { mutableStateOf(currentFilters?.priceRange?.first?.toString() ?: "") }
     var maxPrice by remember { mutableStateOf(currentFilters?.priceRange?.last?.toString() ?: "") }
-    var bedrooms by remember { mutableStateOf(currentFilters?.bedrooms ?: 1) }
-    var bathrooms by remember { mutableStateOf(currentFilters?.bathrooms ?: 1) }
+    var bedrooms by remember { mutableIntStateOf(currentFilters?.bedrooms ?: 1) }
+    var bathrooms by remember { mutableIntStateOf(currentFilters?.bathrooms ?: 1) }
     var propertyType by remember { mutableStateOf(currentFilters?.propertyType ?: "Apartment") }
 
     val propertyTypes = listOf("Apartment", "House", "Townhouse", "Condo")

@@ -62,20 +62,19 @@ fun MapScreen(
             }
         }
     )
-    // *********Use StateFlow to define state variables
+    // state from the mapScreenViewModel
     val houses by mapScreenViewModel.houseLocations.collectAsState()
     val selectedHouse by mapScreenViewModel.selectedHouse.collectAsState()
+
+    // state from the UserStateViewModel
+    val filters by userStateViewModel.filters.collectAsState(initial = null)
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds = userStateViewModel.favoriteHouseIds.collectAsState()
-    // Search query state
 
-// Search query state
-    var searchQuery by remember { mutableStateOf("") }
+    //local state
+    var searchQuery by remember { mutableStateOf("") }    // Search query state
 
-// Filters from the UserStateViewModel
-    val filters by userStateViewModel.filters.collectAsState(initial = null)
-
-// Apply both search query and filters
+   // Apply both search query and filters
     val filteredHouses = remember(searchQuery, filters,houses) {
         houses.filter { house ->
             val matchesSearchQuery = searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
@@ -189,7 +188,9 @@ fun MapScreen(
                         false
                     }
                     Box(modifier = Modifier.clickable {
-                        navController.navigate(Routes.Detail(house.houseId).route)
+                        navController.navigate(Routes.Detail(house.houseId).route){
+                            launchSingleTop = true
+                        }
                     }){
                     HouseItem(
                         houseId=house.houseId,

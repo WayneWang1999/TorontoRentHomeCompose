@@ -1,7 +1,7 @@
 package com.example.torontorenthomecompose.ui.screen.viewmodels
 
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.torontorenthome.models.House
