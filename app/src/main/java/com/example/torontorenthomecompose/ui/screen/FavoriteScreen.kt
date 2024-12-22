@@ -1,6 +1,7 @@
 package com.example.torontorenthomecompose.ui.screen
 
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +9,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -88,11 +92,31 @@ fun HouseList(
     onHouseClick: (String) -> Unit,
     onFavoriteToggle: (String) -> Unit
 ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
         items(houses.size) { index ->
             val house = houses[index]
+
+            // Animating the item when it enters the screen
+            val scale = remember { androidx.compose.animation.core.Animatable(0.8f) }
+            LaunchedEffect(Unit) {
+                scale.animateTo(
+                    targetValue = 1f,
+                    animationSpec = androidx.compose.animation.core.spring(
+                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
+                        stiffness = androidx.compose.animation.core.Spring.StiffnessLow
+                    )
+                )
+            }
+
             Box(
-                modifier = Modifier.clickable { onHouseClick(house.houseId) }
+                modifier = Modifier
+                    .graphicsLayer(
+                        scaleX = scale.value,
+                        scaleY = scale.value
+                    )
+                    .clickable { onHouseClick(house.houseId) }
             ) {
                 HouseItem(
                     houseId = house.houseId,
@@ -104,7 +128,8 @@ fun HouseList(
                     area = house.area,
                     createTime = house.createTime,
                     onFavoriteClick = onFavoriteToggle,
-                    isFavorite = true
+                    isFavorite = true,
+                    modifier = Modifier.animateContentSize() // Smooth animation for content size changes
                 )
             }
         }

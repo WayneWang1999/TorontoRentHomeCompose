@@ -1,6 +1,7 @@
 package com.example.torontorenthomecompose.ui.screen
 
 import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -143,28 +147,46 @@ fun ListScreen(
                     } else {
                         false
                     }
-                    Box(modifier = Modifier.clickable {
-                        navController.navigate(Routes.Detail(house.houseId).route)
-                    })
-                    {HouseItem(
-                        houseId = house.houseId,
-                        imageUrl = house.imageUrl,
-                        price = house.price,
-                        bedrooms = house.bedrooms,
-                        address = house.address,
-                        bathrooms = house.bathrooms,
-                        area = house.area,
-                        createTime = house.createTime,
-                        onFavoriteClick = { houseId ->
-                            userStateViewModel.toggleFavorite(houseId)
-                        },
-                        isFavorite = isFavorite
-                    )
-                    }// Clickable modifier here)
 
+                    // Animating the scale of the item
+                    val scale = remember { androidx.compose.animation.core.Animatable(0.8f) }
+                    LaunchedEffect(Unit) {
+                        scale.animateTo(
+                            targetValue = 1f,
+                            animationSpec = androidx.compose.animation.core.spring(
+                                dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
+                                stiffness = androidx.compose.animation.core.Spring.StiffnessLow
+                            )
+                        )
+                    }
 
+                    Box(
+                        modifier = Modifier
+                            .scale(scale.value) // Apply the scaling animation
+                            .clickable { navController.navigate(Routes.Detail(house.houseId).route) }
+                            .padding(8.dp) // Add some padding for better spacing
+                    ) {
+                        HouseItem(
+                            houseId = house.houseId,
+                            imageUrl = house.imageUrl,
+                            price = house.price,
+                            bedrooms = house.bedrooms,
+                            address = house.address,
+                            bathrooms = house.bathrooms,
+                            area = house.area,
+                            createTime = house.createTime,
+                            onFavoriteClick = { houseId ->
+                                userStateViewModel.toggleFavorite(houseId)
+                            },
+                            isFavorite = isFavorite,
+                            modifier = Modifier
+                                .animateContentSize() // Smooth transition for content changes
+                                .padding(8.dp) // Padding around each item
+                        )
+                    }
                 }
             }
+
         }
     }
 }

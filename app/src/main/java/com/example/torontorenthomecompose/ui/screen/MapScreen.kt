@@ -2,6 +2,7 @@ package com.example.torontorenthomecompose.ui.screen
 
 
 import android.util.Log
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -202,7 +203,8 @@ fun MapScreen(
 
                         onFavoriteClick = { houseId ->
                             userStateViewModel.toggleFavorite(houseId) },
-                        isFavorite = isFavorite
+                        isFavorite = isFavorite,
+                        modifier = Modifier.animateContentSize()
                     )}
                 }
             }

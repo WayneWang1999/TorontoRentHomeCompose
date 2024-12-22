@@ -42,7 +42,8 @@ fun HouseItem(
     area: Int,
     createTime: String,
     onFavoriteClick: (String) -> Unit,
-    isFavorite: Boolean
+    isFavorite: Boolean,
+    modifier: Modifier // Mandatory Modifier parameter
 ) {
     val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(price)
     Column(
