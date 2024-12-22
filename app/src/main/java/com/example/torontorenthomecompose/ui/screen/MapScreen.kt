@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.R
 import com.example.torontorenthomecompose.ui.screen.viewmodels.MapScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
@@ -49,7 +50,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun MapScreen(
     userStateViewModel: UserStateViewModel,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
+    navController: NavHostController
 ) {
     val mapScreenViewModel: MapScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
@@ -184,6 +186,9 @@ fun MapScreen(
                     } else {
                         false
                     }
+                    Box(modifier = Modifier.clickable {
+                        navController.navigate("detail/${house.houseId}")
+                    }){
                     HouseItem(
                         houseId=house.houseId,
                         imageUrl = house.imageUrl,
@@ -193,10 +198,11 @@ fun MapScreen(
                         bathrooms = house.bathrooms,
                         area = house.area,
                         createTime = house.createTime,
+
                         onFavoriteClick = { houseId ->
                             userStateViewModel.toggleFavorite(houseId) },
                         isFavorite = isFavorite
-                    )
+                    )}
                 }
             }
         }

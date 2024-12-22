@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
@@ -35,7 +36,7 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 fun ListScreen(
     userStateViewModel: UserStateViewModel,
     onFilterClick: () -> Unit,
-    onItemClick: () -> Unit,
+    navController: NavHostController
 ) {
     val listScreenViewModel: ListScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
@@ -139,7 +140,9 @@ fun ListScreen(
                     } else {
                         false
                     }
-                    Box(modifier = Modifier.clickable { onItemClick() })
+                    Box(modifier = Modifier.clickable {
+                        navController.navigate("detail/${house.houseId}")
+                    })
                     {HouseItem(
                         houseId = house.houseId,
                         imageUrl = house.imageUrl,
@@ -154,7 +157,6 @@ fun ListScreen(
                         },
                         isFavorite = isFavorite
                     )
-
                     }// Clickable modifier here)
 
 

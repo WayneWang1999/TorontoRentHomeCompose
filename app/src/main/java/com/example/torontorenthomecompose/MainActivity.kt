@@ -66,12 +66,12 @@ fun MyApp(userStateViewModel: UserStateViewModel) {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute !in listOf(Routes.FILTER,Routes.DETAIL))  {
+            if (currentRoute !in listOf(Routes.FILTER, Routes.DETAIL)) {
                 BottomNavigationBar(navController)
             }
         }
     ) { innerPadding ->
-        NavHostContainer(navController, Modifier.padding(innerPadding),userStateViewModel)
+        NavHostContainer(navController, Modifier.padding(innerPadding), userStateViewModel)
     }
 }
 
@@ -115,20 +115,40 @@ fun NavHostContainer(
         composable(Routes.MAP) {
             MapScreen(
                 userStateViewModel,
-                onFilterClick = { navController.navigate("filter") }
-        ) }
+                onFilterClick = { navController.navigate("filter") },
+                navController
+            )
+        }
         composable(Routes.LIST) {
             ListScreen(
                 userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
-                onItemClick = {navController.navigate("detail")}
+                navController
+            )
+        }
 
-        ) }
-        composable(Routes.FAVORITES) { FavoriteScreen(userStateViewModel) }
-        composable(Routes.DETAIL) { DetailScreen(
-            onBackClick = { navController.popBackStack() },
-        ) }
-        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel,navController) }
+        composable(Routes.FAVORITES) {
+            FavoriteScreen(
+                userStateViewModel,
+                navController
+            )
+        }
+
+//        composable(Routes.DETAIL) { DetailScreen(
+//            onBackClick = { navController.popBackStack() },
+//        ) }
+
+        composable("detail/{houseId}") { backStackEntry ->
+            val houseId = backStackEntry.arguments?.getString("houseId")
+            DetailScreen(
+                onBackClick = { navController.popBackStack() },
+                houseId = houseId
+            )
+
+        }
+
+
+        composable(Routes.ACCOUNT) { AccountScreen(userStateViewModel, navController) }
         composable(Routes.FILTER) {
             FilterScreen(
                 userStateViewModel,// Pass the current filters
@@ -143,14 +163,17 @@ fun NavHostContainer(
                     )
                     navController.popBackStack() // Navigate back after applying filters
                 },
-                onClearFilters={
+                onClearFilters = {
                     userStateViewModel.clearFilters()
                 }
-        ) }
-        composable(Routes.SIGNUP){ SignUpScreen(
-            onBackClick = { navController.popBackStack() },
-            navController
-        )} // Pass navController
+            )
+        }
+        composable(Routes.SIGNUP) {
+            SignUpScreen(
+                onBackClick = { navController.popBackStack() },
+                navController
+            )
+        } // Pass navController
     }
 }
 
@@ -175,7 +198,7 @@ object Routes {
     const val LIST = "list"
     const val FAVORITES = "favorites"
     const val ACCOUNT = "account"
-    const val SIGNUP="signup"
-    const val FILTER="filter"
-    const val DETAIL="detail"
+    const val SIGNUP = "signup"
+    const val FILTER = "filter"
+    const val DETAIL = "detail/{houseId}"
 }

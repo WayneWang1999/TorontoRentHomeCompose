@@ -1,6 +1,7 @@
 package com.example.torontorenthomecompose.ui.screen
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,13 +15,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.viewmodels.FavoriteScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 
 @Composable
 fun FavoriteScreen(
-    userStateViewModel: UserStateViewModel
+    userStateViewModel: UserStateViewModel,
+    navController: NavHostController
 ) {
     val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
@@ -42,6 +45,9 @@ fun FavoriteScreen(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(houseList.value.size) { index ->
                     val house = houseList.value[index]
+                    Box(modifier = Modifier.clickable {
+                        navController.navigate("detail/${house.houseId}")
+                    }){
                     HouseItem(
                         houseId=house.houseId,
                         imageUrl = house.imageUrl,
@@ -51,10 +57,11 @@ fun FavoriteScreen(
                         bathrooms = house.bathrooms,
                         area = house.area,
                         createTime = house.createTime,
+
                         onFavoriteClick = { houseId ->
                             userStateViewModel.toggleFavorite(houseId) },
                         isFavorite = true
-                    )
+                    )}
                 }
             }
         }
