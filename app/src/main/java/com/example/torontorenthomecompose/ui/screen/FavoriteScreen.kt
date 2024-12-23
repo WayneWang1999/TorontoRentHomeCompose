@@ -41,6 +41,7 @@ fun FavoriteScreen(
     )
     val houseList = favoriteScreenViewModel.favoriteHouses.collectAsState()
     val isLoading by favoriteScreenViewModel.isLoading.collectAsState()
+
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
 
     if (isLoggedIn) {

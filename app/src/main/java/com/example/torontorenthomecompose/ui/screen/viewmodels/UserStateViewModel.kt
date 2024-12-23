@@ -39,19 +39,6 @@ class UserStateViewModel : ViewModel() {
     private val _filters = MutableStateFlow<Filters?>(null)
     val filters: StateFlow<Filters?> get() = _filters
 
-    fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
-        _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
-    }
-
-    // Set filters
-    fun setFilters(newFilters: Filters) {
-        _filters.value = newFilters
-    }
-
-    // Clear filters
-    fun clearFilters() {
-        _filters.value = null
-    }
 
     init {
         val user = auth.currentUser
@@ -60,11 +47,19 @@ class UserStateViewModel : ViewModel() {
         _currentUser.value = user // Set initial user
         if (user != null) {
             Log.d("currentUser", "${user.email}")
-            fetchFavorites(user.uid)
+            fetchFavoriteIds(user.uid)
         }
     }
+    fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
+        _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
+    }
 
-    private fun fetchFavorites(userId: String) {
+    // Clear filters
+    fun clearFilters() {
+        _filters.value = null
+    }
+
+    private fun fetchFavoriteIds(userId: String) {
         viewModelScope.launch {
             try {
                 val document = FirebaseFirestore.getInstance()
@@ -117,7 +112,7 @@ class UserStateViewModel : ViewModel() {
                     _errorMessage.value = ""
 
                     user?.let {
-                        fetchFavorites(it.uid)
+                        fetchFavoriteIds(it.uid)
                     }
                 } else {
                     _isLoggedIn.value = false

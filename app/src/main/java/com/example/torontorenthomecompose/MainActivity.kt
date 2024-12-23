@@ -21,11 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.torontorenthome.util.HouseOperations
 import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.DetailScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
@@ -37,6 +39,7 @@ import com.example.torontorenthomecompose.ui.screen.models.BottomNavItem
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
+
 class MainActivity : ComponentActivity() {
     private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
 
@@ -44,6 +47,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp(userStateViewModel) // Pass it to MyApp
+//            // Create an instance of HouseOperations
+//            val houseOperations = HouseOperations(this)
+//            houseOperations.generateRandomHousesAndUpload()
         }
 
         if (!isLocationPermissionGranted()) {

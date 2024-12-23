@@ -29,12 +29,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.R
 import com.example.torontorenthomecompose.ui.screen.models.Routes
@@ -55,13 +55,10 @@ fun MapScreen(
     onFilterClick: () -> Unit,
     navController: NavHostController
 ) {
-    val mapScreenViewModel: MapScreenViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return MapScreenViewModel(userStateViewModel) as T
-            }
-        }
-    )
+    val mapScreenViewModel: MapScreenViewModel = ViewModelProvider(
+        LocalContext.current as ViewModelStoreOwner
+    ).get(MapScreenViewModel::class.java)
+
     // state from the mapScreenViewModel
     val houses by mapScreenViewModel.houseLocations.collectAsState()
     val selectedHouse by mapScreenViewModel.selectedHouse.collectAsState()

@@ -2,6 +2,7 @@ package com.example.torontorenthomecompose.ui.screen.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.torontorenthome.data.HouseRepository
 import com.example.torontorenthome.models.House
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class ListScreenViewModel(
-    private val userStateViewModel: UserStateViewModel // Inject the UserStateViewModel
+    //private val houseRepository: HouseRepository
 ) : ViewModel() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
@@ -23,6 +24,13 @@ class ListScreenViewModel(
     init {
         fetchHouses()
     }
+
+//    private fun fetchHouses() {
+//        viewModelScope.launch {
+//            val houses = houseRepository.fetchHouses()
+//            _houseList.value = houses
+//        }
+//    }
 
     private fun fetchHouses() {
         viewModelScope.launch {

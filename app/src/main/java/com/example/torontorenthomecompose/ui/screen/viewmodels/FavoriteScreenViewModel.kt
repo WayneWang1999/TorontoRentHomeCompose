@@ -18,15 +18,20 @@ import kotlinx.coroutines.tasks.await
 class FavoriteScreenViewModel(
     private val userStateViewModel: UserStateViewModel // Inject the UserStateViewModel
 ) : ViewModel() {
+
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _houseList = MutableStateFlow<List<House>>(emptyList())
     val houseList: StateFlow<List<House>> = _houseList
 
-
-
     private val _favoriteHouseIds = userStateViewModel.favoriteHouseIds
+
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     val favoriteHouses: StateFlow<List<House>> = _houseList
         .combine(_favoriteHouseIds) { houses, favoriteIds ->
@@ -37,16 +42,10 @@ class FavoriteScreenViewModel(
             initialValue = emptyList()
         )
 
-    private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> = _errorMessage
-
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         fetchHouses()
     }
-
 
     private fun fetchHouses() {
         viewModelScope.launch {

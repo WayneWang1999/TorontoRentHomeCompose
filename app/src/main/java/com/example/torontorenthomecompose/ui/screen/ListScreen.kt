@@ -27,11 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
@@ -43,13 +43,9 @@ fun ListScreen(
     onFilterClick: () -> Unit,
     navController: NavHostController
 ) {
-    val listScreenViewModel: ListScreenViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ListScreenViewModel(userStateViewModel) as T
-            }
-        }
-    )
+    val listScreenViewModel: ListScreenViewModel = ViewModelProvider(
+        LocalContext.current as ViewModelStoreOwner
+    ).get(ListScreenViewModel::class.java)
     // variables from the userStateViewModel
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()

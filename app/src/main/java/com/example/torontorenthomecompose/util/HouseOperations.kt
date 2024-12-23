@@ -34,7 +34,7 @@ class HouseOperations(
             "https://media.istockphoto.com/id/576931188/photo/exterior-of-luxury-house-with-grass-filled-back-yard.jpg?s=1024x1024&w=is&k=20&c=L4BgnHptK0zEPDtEnb0J08iD9yzhI_xOYc5o5ZwtR6c="
         )
 
-        for (i in 1..10) {
+        for (i in 1..20) {
             val latitude = Random.nextDouble(43.65, 43.78)
             val longitude = Random.nextDouble(-79.53, -79.33)
             // Generate random data
