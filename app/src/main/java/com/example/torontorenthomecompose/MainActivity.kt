@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -21,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,12 +41,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
+    // private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp(userStateViewModel) // Pass it to MyApp
+            MyApp() //
 //            // Create an instance of HouseOperations
 //            val houseOperations = HouseOperations(this)
 //            houseOperations.generateRandomHousesAndUpload()
@@ -67,7 +66,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyApp(userStateViewModel: UserStateViewModel) {
+fun MyApp() {
+
     val navController = rememberNavController()
     val currentRoute = currentRoute(navController)
 
@@ -80,7 +80,10 @@ fun MyApp(userStateViewModel: UserStateViewModel) {
             }
         }
     ) { innerPadding ->
-        NavHostContainer(navController, Modifier.padding(innerPadding), userStateViewModel)
+        NavHostContainer(
+            navController,
+            Modifier.padding(innerPadding),
+        )
     }
 }
 
@@ -90,7 +93,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     // List of navigation items
     val navItems = listOf(
         BottomNavItem(Routes.Map.route, Icons.Filled.LocationOn, "Map"),
-        BottomNavItem(Routes.ListHouse.route, Icons.AutoMirrored.Filled.List, "List"),
+        BottomNavItem(Routes.List.route, Icons.AutoMirrored.Filled.List, "List"),
         BottomNavItem(Routes.Favorites.route, Icons.Filled.Favorite, "Favorites"),
         BottomNavItem(Routes.Account.route, Icons.Filled.AccountCircle, "Account")
     )
@@ -111,33 +114,33 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun NavHostContainer(
     navController: NavHostController,
     modifier: Modifier,
-    userStateViewModel: UserStateViewModel
 ) {
-    NavHost(navController = navController, startDestination = Routes.Map.route, modifier = modifier) {
+   // val userStateViewModel: UserStateViewModel = hiltViewModel()
+    NavHost(
+        navController = navController,
+        startDestination = Routes.Map.route,
+        modifier = modifier
+    ) {
         composable(Routes.Map.route) {
             MapScreen(
-                userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
                 navController
             )
         }
-        composable(Routes.ListHouse.route) {
+        composable(Routes.List.route) {
             ListScreen(
-                userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
-                navController
+                navController,
             )
         }
 
         composable(Routes.Favorites.route) {
             FavoriteScreen(
-                userStateViewModel,
                 navController
             )
         }
         composable(Routes.Account.route) {
             AccountScreen(
-                userStateViewModel,
                 navController
             )
         }
@@ -154,21 +157,8 @@ fun NavHostContainer(
 
         composable(Routes.Filter.route) {
             FilterScreen(
-                userStateViewModel,// Pass the current filters
                 onBackClick = { navController.popBackStack() },
-                onApplyFilters = { priceRange, bedrooms, bathrooms, propertyType ->
-                    // Pass the filters to a shared ViewModel
-                    userStateViewModel.applyFilters(
-                        priceRange = priceRange,
-                        bedrooms = bedrooms,
-                        bathrooms = bathrooms,
-                        propertyType = propertyType
-                    )
-                    navController.popBackStack() // Navigate back after applying filters
-                },
-                onClearFilters = {
-                    userStateViewModel.clearFilters()
-                }
+                navController,
             )
         }
         composable(Routes.SignUp.route) {

@@ -30,10 +30,10 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 
 @Composable
 fun FavoriteScreen(
-    userStateViewModel: UserStateViewModel,
     navController: NavHostController,
-  //  favoriteScreenViewModel: FavoriteScreenViewModel= hiltViewModel()
+   // favoriteScreenViewModel: FavoriteScreenViewModel= hiltViewModel()
    ) {
+    val userStateViewModel: UserStateViewModel = hiltViewModel()
     val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

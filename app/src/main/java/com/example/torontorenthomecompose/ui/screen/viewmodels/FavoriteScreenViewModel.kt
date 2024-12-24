@@ -1,7 +1,7 @@
 package com.example.torontorenthomecompose.ui.screen.viewmodels
 
 
-
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.torontorenthome.models.House
@@ -20,10 +20,9 @@ import javax.inject.Inject
 
 
 class FavoriteScreenViewModel (
-    private val userStateViewModel: UserStateViewModel,
-
+     private val userStateViewModel: UserStateViewModel
 ) : ViewModel() {
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _houseList = MutableStateFlow<List<House>>(emptyList())

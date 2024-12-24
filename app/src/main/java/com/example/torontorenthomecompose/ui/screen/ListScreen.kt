@@ -37,16 +37,23 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 
 @Composable
 fun ListScreen(
-    userStateViewModel: UserStateViewModel,
     onFilterClick: () -> Unit,
     navController: NavHostController,
-    listScreenViewModel: ListScreenViewModel = hiltViewModel()
+    listScreenViewModel: ListScreenViewModel = hiltViewModel(),
+    userStateViewModel: UserStateViewModel=hiltViewModel()
 ) {
-
+   // val userStateViewModel: UserStateViewModel = hiltViewModel()
+    Log.d("FilteredHouses", "In ListScreen userStateViewModel instance: $userStateViewModel")
+    Log.d("FilteredHouses", "UserStateViewModel in ListScreen instance: ${userStateViewModel.hashCode()}")
     // variables from the userStateViewModel
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()
     val filters by userStateViewModel.filters.collectAsState()// Filters from the UserStateViewModel
+
+    LaunchedEffect(filters) {
+        // Perform some action when filters change
+        Log.d("FilteredHouses", "Filters updated: $filters")
+    }
 
     // variables from the listScreenViewModel
     val houseList by listScreenViewModel.houseList.collectAsState()
@@ -56,16 +63,18 @@ fun ListScreen(
     var searchQuery by remember { mutableStateOf("") }//Search query state
 
 // Apply both search query and filters
-    val filteredHouses = remember(searchQuery, filters,houseList) {
+    val filteredHouses = remember(searchQuery, filters, houseList) {
         houseList.filter { house ->
-            val matchesSearchQuery = searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
+            val matchesSearchQuery =
+                searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
             val matchesFilters = filters?.let {
                 house.price in it.priceRange &&
                         house.bedrooms >= it.bedrooms &&
                         house.bathrooms >= it.bathrooms
+                //  Log.d("FilteredHouses", "Checking house ${house.houseId}: Price Match: ${it.priceRange}priceRange, Bedrooms Match: ${it.bedrooms}")
             } ?: true // Show all houses if filters are null
-
             matchesSearchQuery && matchesFilters
+           // Log.d("FilteredHouses", "House ${house.houseId} matches search: $matchesSearchQuery and filters: $matchesFilters")
         }.also {
             if (filters == null && searchQuery.isBlank()) {
                 Log.d("FilteredHouses", "No filters or search query applied. Showing all houses.")
@@ -155,7 +164,7 @@ fun ListScreen(
                         modifier = Modifier
                             .scale(scale.value) // Apply the scaling animation
                             .clickable {
-                                navController.navigate(Routes.Detail(house.houseId).route){
+                                navController.navigate(Routes.Detail(house.houseId).route) {
                                     launchSingleTop = true
                                 }
                             }

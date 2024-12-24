@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-
-class UserStateViewModel : ViewModel() {
+@HiltViewModel
+class UserStateViewModel  @Inject constructor(): ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // StateFlow to track if the user is logged in
@@ -40,7 +40,7 @@ class UserStateViewModel : ViewModel() {
     val favoriteHouseIds: StateFlow<Set<String>> = _favoriteHouseIds
 
     private val _filters = MutableStateFlow<Filters?>(null)
-    val filters: StateFlow<Filters?> get() = _filters
+    val filters: StateFlow<Filters?>  = _filters
 
 
     init {
@@ -54,7 +54,11 @@ class UserStateViewModel : ViewModel() {
         }
     }
     fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
+        Log.d("FilteredHouses", "In state Applying filters: $priceRange, $bedrooms, $bathrooms, $propertyType")
         _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
+
+        Log.d("FilteredHouses", "In state Applying filters: ${_filters.value.toString()}")
+
     }
 
     // Clear filters

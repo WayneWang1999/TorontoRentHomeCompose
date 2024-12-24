@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,15 +28,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
 fun FilterScreen(
-    userStateViewModel: UserStateViewModel,
-    onApplyFilters: (priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) -> Unit,
     onBackClick: () -> Unit,
-    onClearFilters:()-> Unit,
+    navController: NavHostController,
+    userStateViewModel: UserStateViewModel=hiltViewModel(),
 ) {
+    Log.d("FilteredHouses", "UserStateViewModel in filteScreen instance: ${userStateViewModel.hashCode()}")
     // Collect filters from ViewModel as state
     val currentFilters by userStateViewModel.filters.collectAsState()
 
@@ -52,7 +56,6 @@ fun FilterScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            //.windowInsetsPadding(WindowInsets.systemBars)
     ) {
         // Header Row
         Row(
@@ -68,7 +71,9 @@ fun FilterScreen(
                 text = "Close",
                 fontSize = 14.sp,
                 color = Color.Blue,
-                modifier = Modifier.clickable { onBackClick() }
+                modifier = Modifier.clickable {
+                    onBackClick()
+                    }
             )
         }
 
@@ -157,7 +162,8 @@ fun FilterScreen(
             onClick = {
                 val min = minPrice.toIntOrNull() ?: 0
                 val max = maxPrice.toIntOrNull() ?: Int.MAX_VALUE
-                 onApplyFilters(min..max, bedrooms, bathrooms, propertyType)
+                userStateViewModel.applyFilters(min..max, bedrooms, bathrooms, propertyType)
+                onBackClick()
             },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -166,8 +172,8 @@ fun FilterScreen(
 
         Button(
             onClick = {
-                onClearFilters()
-                onBackClick() // Navigate back after clearing
+                userStateViewModel.clearFilters()
+               onBackClick() // Navigate back after clearing
             },
             modifier = Modifier
                 .fillMaxWidth()

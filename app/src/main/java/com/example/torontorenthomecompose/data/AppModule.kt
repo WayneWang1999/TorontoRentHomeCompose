@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.data
 
+import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -15,5 +16,16 @@ object AppModule {
     @Singleton
     fun provideFirebaseFirestore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()  // Provide FirebaseFirestore instance
+    }
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    object ViewModelModule {
+
+        @Provides
+        @Singleton
+        fun provideUserStateViewModel(): UserStateViewModel {
+            return UserStateViewModel()
+        }
     }
 }
