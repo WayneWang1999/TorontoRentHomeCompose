@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,8 +31,9 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 @Composable
 fun FavoriteScreen(
     userStateViewModel: UserStateViewModel,
-    navController: NavHostController
-) {
+    navController: NavHostController,
+  //  favoriteScreenViewModel: FavoriteScreenViewModel= hiltViewModel()
+   ) {
     val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

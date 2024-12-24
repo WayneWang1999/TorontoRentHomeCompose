@@ -7,10 +7,13 @@ import com.example.torontorenthomecompose.ui.screen.models.Filters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+
 
 class UserStateViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()

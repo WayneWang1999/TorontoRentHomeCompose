@@ -38,8 +38,9 @@ import com.example.torontorenthomecompose.ui.screen.SignUpScreen
 import com.example.torontorenthomecompose.ui.screen.models.BottomNavItem
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
 
