@@ -41,12 +41,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    // private val userStateViewModel: UserStateViewModel by viewModels()  // Initialize the UserStateViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             MyApp() //
 //            // Create an instance of HouseOperations
 //            val houseOperations = HouseOperations(this)
@@ -136,7 +133,15 @@ fun NavHostContainer(
                 navController,
             )
         }
-
+        composable(Routes.Filter.route) {
+            FilterScreen(
+                userStateViewModel,
+                onBackClick = { navController.popBackStack() },
+                //  navController,
+            )
+        }
+// because map and list call back onFilterClick and navigate to filter, so this three should shared
+        // a userStateViewModel in this NavHost
         composable(Routes.Favorites.route) {
             FavoriteScreen(
                 navController
@@ -158,13 +163,7 @@ fun NavHostContainer(
             )
         }
 
-        composable(Routes.Filter.route) {
-            FilterScreen(
-                userStateViewModel,
-                onBackClick = { navController.popBackStack() },
-              //  navController,
-            )
-        }
+
         composable(Routes.SignUp.route) {
             SignUpScreen(
                 onBackClick = { navController.popBackStack() },

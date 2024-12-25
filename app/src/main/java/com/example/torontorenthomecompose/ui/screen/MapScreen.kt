@@ -54,8 +54,6 @@ fun MapScreen(
     navController: NavHostController,
     mapScreenViewModel: MapScreenViewModel = hiltViewModel()
 ) {
-   // val userStateViewModel: UserStateViewModel = hiltViewModel()
-    // state from the mapScreenViewModel
     val houses by mapScreenViewModel.houseLocations.collectAsState()
     val selectedHouse by mapScreenViewModel.selectedHouse.collectAsState()
 

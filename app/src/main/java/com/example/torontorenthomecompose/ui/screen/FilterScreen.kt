@@ -35,9 +35,7 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 fun FilterScreen(
     userStateViewModel: UserStateViewModel,
     onBackClick: () -> Unit,
-    //userStateViewModel: UserStateViewModel=hiltViewModel(),
 ) {
-    Log.d("FilteredHouses", "UserStateViewModel in filteScreen instance: ${userStateViewModel.hashCode()}")
     // Collect filters from ViewModel as state
     val currentFilters by userStateViewModel.filters.collectAsState()
 

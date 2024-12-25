@@ -43,18 +43,11 @@ fun ListScreen(
     listScreenViewModel: ListScreenViewModel = hiltViewModel(),
 
 ) {
-   // val userStateViewModel: UserStateViewModel = hiltViewModel()
-    Log.d("FilteredHouses", "In ListScreen userStateViewModel instance: $userStateViewModel")
-    Log.d("FilteredHouses", "UserStateViewModel in ListScreen instance: ${userStateViewModel.hashCode()}")
+
     // variables from the userStateViewModel
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()
     val filters by userStateViewModel.filters.collectAsState()// Filters from the UserStateViewModel
-
-    LaunchedEffect(filters) {
-        // Perform some action when filters change
-        Log.d("FilteredHouses", "Filters updated: $filters")
-    }
 
     // variables from the listScreenViewModel
     val houseList by listScreenViewModel.houseList.collectAsState()
@@ -72,10 +65,8 @@ fun ListScreen(
                 house.price in it.priceRange &&
                         house.bedrooms >= it.bedrooms &&
                         house.bathrooms >= it.bathrooms
-                //  Log.d("FilteredHouses", "Checking house ${house.houseId}: Price Match: ${it.priceRange}priceRange, Bedrooms Match: ${it.bedrooms}")
             } ?: true // Show all houses if filters are null
             matchesSearchQuery && matchesFilters
-           // Log.d("FilteredHouses", "House ${house.houseId} matches search: $matchesSearchQuery and filters: $matchesFilters")
         }.also {
             if (filters == null && searchQuery.isBlank()) {
                 Log.d("FilteredHouses", "No filters or search query applied. Showing all houses.")
@@ -182,7 +173,6 @@ fun ListScreen(
                             createTime = house.createTime,
                             onFavoriteClick = { houseId ->
                                 userStateViewModel.toggleFavorite(houseId)
-                                Log.d("Favorites", "Favorites updated is click on the ListScreen")
                             },
                             isFavorite = isFavorite,
                             modifier = Modifier
