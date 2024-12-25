@@ -7,7 +7,7 @@ import com.google.firebase.firestore.DocumentId
 data class House @JvmOverloads constructor(
     @DocumentId
     @PrimaryKey
-    var houseId:String = "",
+    val houseId:String = "",
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
     val address: String = "",

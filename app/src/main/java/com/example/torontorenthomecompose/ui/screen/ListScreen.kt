@@ -27,11 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
@@ -41,18 +39,17 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 fun ListScreen(
     userStateViewModel: UserStateViewModel,
     onFilterClick: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    listScreenViewModel: ListScreenViewModel = hiltViewModel(),
+
 ) {
-    val listScreenViewModel: ListScreenViewModel = ViewModelProvider(
-        LocalContext.current as ViewModelStoreOwner
-    ).get(ListScreenViewModel::class.java)
+
     // variables from the userStateViewModel
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
     val favoriteHouseIds by userStateViewModel.favoriteHouseIds.collectAsState()
     val filters by userStateViewModel.filters.collectAsState()// Filters from the UserStateViewModel
 
     // variables from the listScreenViewModel
-
     val houseList by listScreenViewModel.houseList.collectAsState()
     val isLoading by listScreenViewModel.isLoading.collectAsState()
 
@@ -60,15 +57,15 @@ fun ListScreen(
     var searchQuery by remember { mutableStateOf("") }//Search query state
 
 // Apply both search query and filters
-    val filteredHouses = remember(searchQuery, filters,houseList) {
+    val filteredHouses = remember(searchQuery, filters, houseList) {
         houseList.filter { house ->
-            val matchesSearchQuery = searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
+            val matchesSearchQuery =
+                searchQuery.isBlank() || house.address.contains(searchQuery, ignoreCase = true)
             val matchesFilters = filters?.let {
                 house.price in it.priceRange &&
                         house.bedrooms >= it.bedrooms &&
                         house.bathrooms >= it.bathrooms
             } ?: true // Show all houses if filters are null
-
             matchesSearchQuery && matchesFilters
         }.also {
             if (filters == null && searchQuery.isBlank()) {
@@ -159,7 +156,7 @@ fun ListScreen(
                         modifier = Modifier
                             .scale(scale.value) // Apply the scaling animation
                             .clickable {
-                                navController.navigate(Routes.Detail(house.houseId).route){
+                                navController.navigate(Routes.Detail(house.houseId).route) {
                                     launchSingleTop = true
                                 }
                             }

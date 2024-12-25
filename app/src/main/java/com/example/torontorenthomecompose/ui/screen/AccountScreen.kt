@@ -30,14 +30,15 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
 
 @Composable
 fun AccountScreen(
-    userStateViewModel: UserStateViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    userStateViewModel: UserStateViewModel = hiltViewModel()
 ) {
     //from the userState variable this userEmail is get from the firestore db and show in
     //the after login UI

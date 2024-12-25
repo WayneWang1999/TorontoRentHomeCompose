@@ -2,7 +2,7 @@ package com.example.torontorenthomecompose.ui.screen.models
 
 sealed class Routes(val route: String) {
     data object Map : Routes("map")
-    data object ListHouse : Routes("list")
+    data object List : Routes("list")
     data object Favorites : Routes("favorites")
     data object Account : Routes("account")
     data object SignUp : Routes("signup")

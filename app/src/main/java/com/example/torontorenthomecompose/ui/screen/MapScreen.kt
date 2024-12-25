@@ -29,12 +29,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.R
 import com.example.torontorenthomecompose.ui.screen.models.Routes
@@ -53,13 +51,9 @@ import com.google.maps.android.compose.rememberCameraPositionState
 fun MapScreen(
     userStateViewModel: UserStateViewModel,
     onFilterClick: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    mapScreenViewModel: MapScreenViewModel = hiltViewModel()
 ) {
-    val mapScreenViewModel: MapScreenViewModel = ViewModelProvider(
-        LocalContext.current as ViewModelStoreOwner
-    ).get(MapScreenViewModel::class.java)
-
-    // state from the mapScreenViewModel
     val houses by mapScreenViewModel.houseLocations.collectAsState()
     val selectedHouse by mapScreenViewModel.selectedHouse.collectAsState()
 

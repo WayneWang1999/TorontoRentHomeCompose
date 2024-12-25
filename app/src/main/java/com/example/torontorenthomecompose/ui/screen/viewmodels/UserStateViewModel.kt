@@ -7,12 +7,15 @@ import com.example.torontorenthomecompose.ui.screen.models.Filters
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class UserStateViewModel : ViewModel() {
+@HiltViewModel
+class UserStateViewModel  @Inject constructor(): ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // StateFlow to track if the user is logged in
@@ -37,7 +40,7 @@ class UserStateViewModel : ViewModel() {
     val favoriteHouseIds: StateFlow<Set<String>> = _favoriteHouseIds
 
     private val _filters = MutableStateFlow<Filters?>(null)
-    val filters: StateFlow<Filters?> get() = _filters
+    val filters: StateFlow<Filters?>  = _filters
 
 
     init {
@@ -51,14 +54,12 @@ class UserStateViewModel : ViewModel() {
         }
     }
     fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
-        _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
-    }
-
+               _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
+           }
     // Clear filters
     fun clearFilters() {
         _filters.value = null
     }
-
     private fun fetchFavoriteIds(userId: String) {
         viewModelScope.launch {
             try {
@@ -75,7 +76,6 @@ class UserStateViewModel : ViewModel() {
             }
         }
     }
-
     fun toggleFavorite(houseId: String) {
         viewModelScope.launch {
             val currentFavorites = _favoriteHouseIds.value.toMutableSet()
@@ -99,7 +99,6 @@ class UserStateViewModel : ViewModel() {
             }
         }
     }
-
     // Login function
     fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)

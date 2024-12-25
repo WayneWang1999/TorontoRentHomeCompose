@@ -3,7 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
-    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+   id("com.google.devtools.ksp")
 }
 
 android {
@@ -75,11 +77,11 @@ dependencies {
     implementation( "com.google.firebase:firebase-auth-ktx:22.3.1")
 
     // Room runtime
-    implementation("androidx.room:room-runtime:2.5.2")
+    implementation("androidx.room:room-runtime:2.6.1")
     // Room Kotlin extensions and Coroutines support
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-ktx:2.6.1")
     // Annotation Processor (KAPT) or Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.material3:material3:1.2.1")
@@ -92,5 +94,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.5.0") // Or your version
     implementation("com.google.maps.android:maps-compose:2.13.0") // Google Maps Compose library
 
-
+    // Dagger Hilt
+    implementation("com.google.dagger:hilt-android:2.54")
+    kapt("com.google.dagger:hilt-compiler:2.54")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }
