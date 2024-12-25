@@ -18,9 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.torontorenthome.models.House
 import com.example.torontorenthomecompose.ui.screen.models.Routes
@@ -31,27 +28,21 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 @Composable
 fun FavoriteScreen(
     navController: NavHostController,
-   // favoriteScreenViewModel: FavoriteScreenViewModel= hiltViewModel()
-   ) {
-    val userStateViewModel: UserStateViewModel = hiltViewModel()
-    val favoriteScreenViewModel: FavoriteScreenViewModel = viewModel(
-        factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return FavoriteScreenViewModel(userStateViewModel) as T
-            }
-        }
-    )
-    val houseList = favoriteScreenViewModel.favoriteHouses.collectAsState()
-    val isLoading by favoriteScreenViewModel.isLoading.collectAsState()
+    favoriteScreenViewModel: FavoriteScreenViewModel = hiltViewModel(),
+    userStateViewModel: UserStateViewModel = hiltViewModel()
+) {
 
+  //  val houseList = favoriteScreenViewModel.favoriteHouses.collectAsState()
+    val houseList by favoriteScreenViewModel.getFavoriteHouses(userStateViewModel).collectAsState()
+    val isLoading by favoriteScreenViewModel.isLoading.collectAsState()
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()
 
     if (isLoggedIn) {
         when {
             isLoading -> LoadingIndicator()
-            houseList.value.isEmpty() -> EmptyFavoritesMessage()
+            houseList.isEmpty() -> EmptyFavoritesMessage()
             else -> HouseList(
-                houses = houseList.value,
+                houses = houseList,
                 onHouseClick = { houseId ->
                     navController.navigate(Routes.Detail(houseId).route) {
                         launchSingleTop = true

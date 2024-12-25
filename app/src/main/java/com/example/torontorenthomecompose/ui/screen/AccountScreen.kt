@@ -37,9 +37,9 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 
 @Composable
 fun AccountScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    userStateViewModel: UserStateViewModel = hiltViewModel()
 ) {
-   val userStateViewModel: UserStateViewModel = hiltViewModel()
     //from the userState variable this userEmail is get from the firestore db and show in
     //the after login UI
     val isLoggedIn by userStateViewModel.isLoggedIn.collectAsState()

@@ -52,20 +52,18 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
             Log.d("currentUser", "${user.email}")
             fetchFavoriteIds(user.uid)
         }
+        Log.d("Favorites", "ViewModel created")
     }
     fun applyFilters(priceRange: IntRange, bedrooms: Int, bathrooms: Int, propertyType: String) {
-        Log.d("FilteredHouses", "In state Applying filters: $priceRange, $bedrooms, $bathrooms, $propertyType")
+        Log.d("Favorites", "In state Applying filters: $priceRange, $bedrooms, $bathrooms, $propertyType")
         _filters.value = Filters(priceRange, bedrooms, bathrooms, propertyType)
-
-        Log.d("FilteredHouses", "In state Applying filters: ${_filters.value.toString()}")
+        Log.d("Favorites", "In state Applying filters: ${_filters.value.toString()}")
 
     }
-
     // Clear filters
     fun clearFilters() {
         _filters.value = null
     }
-
     private fun fetchFavoriteIds(userId: String) {
         viewModelScope.launch {
             try {
@@ -82,9 +80,10 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
             }
         }
     }
-
     fun toggleFavorite(houseId: String) {
+        Log.d("Favorites", "Favorites updated is get the click in the UserStateVM")
         viewModelScope.launch {
+            Log.d("Favorites", "viewModelScope.launch start")
             val currentFavorites = _favoriteHouseIds.value.toMutableSet()
             if (currentFavorites.contains(houseId)) {
                 currentFavorites.remove(houseId)
@@ -92,6 +91,7 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
                 currentFavorites.add(houseId)
             }
             _favoriteHouseIds.value = currentFavorites
+            Log.d("Favorites", "Favorites updated: ${_favoriteHouseIds.value}")
 
             _currentUser.value?.let { user ->
                 try {
@@ -106,6 +106,9 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
             }
         }
     }
+
+
+
 
     // Login function
     fun login(email: String, password: String) {
@@ -138,6 +141,10 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
         _currentUser.value = null // Clear current user
         _favoriteHouseIds.value = emptySet() // Clear favorites
         _filters.value = null // Clear filters if applicable
+    }
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("Favorites", "ViewModel cleared")
     }
 }
 

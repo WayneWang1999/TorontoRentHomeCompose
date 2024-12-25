@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             MyApp() //
 //            // Create an instance of HouseOperations
 //            val houseOperations = HouseOperations(this)
@@ -115,7 +116,7 @@ fun NavHostContainer(
     navController: NavHostController,
     modifier: Modifier,
 ) {
-   // val userStateViewModel: UserStateViewModel = hiltViewModel()
+    val userStateViewModel: UserStateViewModel = hiltViewModel()
     NavHost(
         navController = navController,
         startDestination = Routes.Map.route,
@@ -123,12 +124,14 @@ fun NavHostContainer(
     ) {
         composable(Routes.Map.route) {
             MapScreen(
+                userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
                 navController
             )
         }
         composable(Routes.List.route) {
             ListScreen(
+                userStateViewModel,
                 onFilterClick = { navController.navigate("filter") },
                 navController,
             )
@@ -157,8 +160,9 @@ fun NavHostContainer(
 
         composable(Routes.Filter.route) {
             FilterScreen(
+                userStateViewModel,
                 onBackClick = { navController.popBackStack() },
-                navController,
+              //  navController,
             )
         }
         composable(Routes.SignUp.route) {

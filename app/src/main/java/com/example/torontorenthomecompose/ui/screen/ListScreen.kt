@@ -37,10 +37,11 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 
 @Composable
 fun ListScreen(
+    userStateViewModel: UserStateViewModel,
     onFilterClick: () -> Unit,
     navController: NavHostController,
     listScreenViewModel: ListScreenViewModel = hiltViewModel(),
-    userStateViewModel: UserStateViewModel=hiltViewModel()
+
 ) {
    // val userStateViewModel: UserStateViewModel = hiltViewModel()
     Log.d("FilteredHouses", "In ListScreen userStateViewModel instance: $userStateViewModel")
@@ -181,6 +182,7 @@ fun ListScreen(
                             createTime = house.createTime,
                             onFavoriteClick = { houseId ->
                                 userStateViewModel.toggleFavorite(houseId)
+                                Log.d("Favorites", "Favorites updated is click on the ListScreen")
                             },
                             isFavorite = isFavorite,
                             modifier = Modifier
