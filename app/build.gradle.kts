@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+   id("com.google.devtools.ksp")
 }
 
 android {
@@ -76,11 +77,11 @@ dependencies {
     implementation( "com.google.firebase:firebase-auth-ktx:22.3.1")
 
     // Room runtime
-    implementation("androidx.room:room-runtime:2.5.2")
+    implementation("androidx.room:room-runtime:2.6.1")
     // Room Kotlin extensions and Coroutines support
-    implementation("androidx.room:room-ktx:2.5.2")
+    implementation("androidx.room:room-ktx:2.6.1")
     // Annotation Processor (KAPT) or Kotlin Symbol Processing (KSP)
-    //kapt("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.compose.material3:material3:1.2.1")

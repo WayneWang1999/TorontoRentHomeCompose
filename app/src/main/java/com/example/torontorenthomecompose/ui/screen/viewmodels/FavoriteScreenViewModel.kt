@@ -1,5 +1,4 @@
 package com.example.torontorenthomecompose.ui.screen.viewmodels
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.torontorenthome.models.House

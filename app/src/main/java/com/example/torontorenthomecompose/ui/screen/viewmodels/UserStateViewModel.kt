@@ -99,10 +99,6 @@ class UserStateViewModel  @Inject constructor(): ViewModel() {
             }
         }
     }
-
-
-
-
     // Login function
     fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)

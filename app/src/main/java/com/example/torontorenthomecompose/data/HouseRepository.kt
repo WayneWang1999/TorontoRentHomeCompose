@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.data
 
+import com.example.torontorenthome.data.HouseDao
 import com.example.torontorenthome.models.House
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,7 +9,8 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class HouseRepository @Inject constructor(
-    private val firestore: FirebaseFirestore  // Inject FirebaseFirestore
+    private val firestore: FirebaseFirestore ,
+    private val houseDao: HouseDao    // Inject FirebaseFirestore
 ) {
 
     // MutableStateFlow for managing house list and loading state
@@ -30,10 +32,13 @@ class HouseRepository @Inject constructor(
                 .mapNotNull { it.toObject(House::class.java) }
 
             _houseList.value = houses  // Update house list
+            // Update local Room database with new data
+               houseDao.insertHouses(houses)
         } catch (e: Exception) {
             // Handle error, print stack trace, and set empty list in case of failure
+            _houseList.value = houseDao.getAllHouses()
             e.printStackTrace()
-            _houseList.value = emptyList()
+           // _houseList.value = emptyList()
         } finally {
             _isLoading.value = false  // End loading
         }
