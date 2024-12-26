@@ -30,7 +30,8 @@ object AppModule {
             context,
             HouseDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

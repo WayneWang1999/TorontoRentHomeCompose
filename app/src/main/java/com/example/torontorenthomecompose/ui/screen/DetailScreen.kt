@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
@@ -46,7 +48,10 @@ fun DetailScreen(
         when (val houseDetails = house.value) {
             null -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             else -> {
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                ) {
                     // Image Pager
                     Row(
                         modifier = Modifier
@@ -136,6 +141,21 @@ fun DetailScreen(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = if (houseDetails.isAvailable) Color(0xFF4CAF50) else Color.Red,
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        // Availability or Custom Tags
+                        Text(
+                            text = "List Description",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            color =  Color(0xFF4CAF50),
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                        Text(
+                            text = "${houseDetails.description}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color =  Color.Black,
                             modifier = Modifier.padding(top = 16.dp)
                         )
                     }

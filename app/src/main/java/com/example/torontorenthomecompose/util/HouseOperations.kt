@@ -31,10 +31,15 @@ class HouseOperations(
             "https://media.istockphoto.com/id/598165834/photo/nice-curb-appeal-of-american-craftsman-style-house.jpg?s=1024x1024&w=is&k=20&c=8UjUowY71dCmYvfGHi4k5Jjk8mRRHTdjPic3xt74tdM=",
             "https://media.istockphoto.com/id/590059304/photo/wooden-walkout-deck-well-kept-garden-with-bushes-and-flowers.jpg?s=1024x1024&w=is&k=20&c=-hoF2xsxOMmlRhOpmlId_gEAfOw7yNbffzWoPb6J7bE=",
             "https://media.istockphoto.com/id/481653068/photo/large-back-yard-with-greenery-and-furnished-porch.jpg?s=1024x1024&w=is&k=20&c=CNvqwJgqfbFZFEv3eA_y0khTjSMlM09f4AKpE2uhpT4=",
-            "https://media.istockphoto.com/id/576931188/photo/exterior-of-luxury-house-with-grass-filled-back-yard.jpg?s=1024x1024&w=is&k=20&c=L4BgnHptK0zEPDtEnb0J08iD9yzhI_xOYc5o5ZwtR6c="
+            "https://media.istockphoto.com/id/576931188/photo/exterior-of-luxury-house-with-grass-filled-back-yard.jpg?s=1024x1024&w=is&k=20&c=L4BgnHptK0zEPDtEnb0J08iD9yzhI_xOYc5o5ZwtR6c=",
+            "https://media.istockphoto.com/id/1440262289/photo/modern-custom-new-england-colonial-home-with-an-american-flag-on-a-sunny-day.jpg?s=2048x2048&w=is&k=20&c=MaCi2-dUxYfBp-8uLqnCuosUbaxmdTiD8S1fPRTlnrE=",
+            "https://media.istockphoto.com/id/1344654402/photo/home-with-three-car-garage.jpg?s=2048x2048&w=is&k=20&c=j3Vmf0zT8wFFPIfw-7Jy0syz3NAa6pVnTaI2sr0KGG4=",
+            "https://media.istockphoto.com/id/508882763/photo/luxury-house-exterior.jpg?s=2048x2048&w=is&k=20&c=eoYxc8Pn0UU83nqM7kC767oZKWBkN4Tsz-VORtqCiSQ=",
+            "https://media.istockphoto.com/id/478398208/photo/modern-log-cabin-on-waterfront-with-rustic-feel.jpg?s=2048x2048&w=is&k=20&c=9qP1PiqqJfpghRzeLGJmdxmcWwgnZ6OS7b2c6vSMw2U=",
+            "https://media.istockphoto.com/id/1146993778/photo/modern-suburban-house-exterior.jpg?s=1024x1024&w=is&k=20&c=EH_sPqbp58U_E7H8mGdNMMZqfwo3V0XfjSk2vRp5Cx8=",
         )
 
-        for (i in 1..20) {
+        for (i in 1..50) {
             val latitude = Random.nextDouble(43.65, 43.78)
             val longitude = Random.nextDouble(-79.53, -79.33)
             // Generate random data
@@ -43,7 +48,7 @@ class HouseOperations(
                 longitude = longitude,
                 address = getStreetAddress(latitude, longitude),
                 createTime = "${Random.nextInt(1, 100)} days",
-                description = "A beautiful house with modern amenities.",
+                description = "This exquisite custom built home showcases unmatched beauty and exceptional craftsmanship, making it a true gem in the highly sought-after Bayview Woods neighborhood. Every detail reflects a custom design where no expense has been spared, featuring a thoughtfully laid-out floor plan that includes a formal living and dining area. The chef's kitchen, a culinary haven, was the birthplace of the renowned gourmet salad dressings created by \"\"Renee\"\" herself, offering an inspiring space for culinary creativity. Transitioning to the elegant family room, you'll find built-in shelving, a cozy gas fireplace, and multiple walkouts leading to a stunning garden oasis, perfect for hosting gatherings and entertaining guests. Ascend to the second floor via the convenient elevator, where the primary bedroom awaits, boasting a grand double door entry, its own fireplace, and two walkouts that lead to a private balcony, providing a serene retreat. This luxurious suite also features a personal dressing room with pocket doors, clothes carousel and an opulent six-piece ensuite bathroom, ensuring comfort and sophistication. The fully finished basement adds even more value to this remarkable home, complete with a recreation room, a wet bar for entertaining, and an additional bedroom, making it the perfect package for those seeking a lifestyle of elegance and convenience. This residence is ideally situated near an array of boutiques, exquisite dining options, golf courses, and country clubs, making it a perfect choice for those who appreciate a vibrant lifestyle. Additionally, it falls within a highly sought-after school district that includes an array of private schools, Steeleview PS, Zion Heights MS, and AY Jackson SS , all of which boast a rich legacy of academic achievement. Living here means not only enjoying luxurious amenities but also providing your family with access to top-tier education. **** EXTRAS **** Elevator, Garage Access From House, Generator, Two Central Air Conditioning Units, Heat Pump in Primary Bedroom, Built In Speakers, Heated Floors on Primary Ensuite and Main Bath, Heated Towel Rack in Main Bath, Cedar Closet (38056489)",
                 bedrooms = Random.nextInt(1, 6),
                 bathrooms = Random.nextInt(1,6),
                 area = Random.nextInt(500,10000),

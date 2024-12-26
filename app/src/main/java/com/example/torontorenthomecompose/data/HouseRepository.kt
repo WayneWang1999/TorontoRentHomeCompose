@@ -20,27 +20,32 @@ class HouseRepository @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    // Fetch houses from Firestore and update the flow states
     suspend fun fetchHouses() {
-        _isLoading.value = true  // Start loading
+        _isLoading.value = true
         try {
-            // Fetch the list of houses from Firestore
+            // Preload local data
+            val cachedHouses = houseDao.getAllHouses()
+            if (cachedHouses.isNotEmpty()) {
+                _houseList.value = cachedHouses
+            }
+
+            // Fetch from Firestore
             val houses = firestore.collection("houses")
                 .get()
-                .await()  // Asynchronously await the result
+                .await()
                 .documents
                 .mapNotNull { it.toObject(House::class.java) }
 
-            _houseList.value = houses  // Update house list
-            // Update local Room database with new data
-               houseDao.insertHouses(houses)
+            // Update StateFlow and Room
+            _houseList.value = houses
+          //  houseDao.clearAll()
+            houseDao.insertHouses(houses)
         } catch (e: Exception) {
-            // Handle error, print stack trace, and set empty list in case of failure
-            _houseList.value = houseDao.getAllHouses()
             e.printStackTrace()
-           // _houseList.value = emptyList()
+            _houseList.value = houseDao.getAllHouses() // Fallback to local cache
         } finally {
-            _isLoading.value = false  // End loading
+            _isLoading.value = false
         }
     }
+
 }
