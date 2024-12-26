@@ -28,8 +28,9 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 @Composable
 fun FavoriteScreen(
     navController: NavHostController,
+   // userStateViewModel: UserStateViewModel = hiltViewModel()
+   userStateViewModel: UserStateViewModel,
     favoriteScreenViewModel: FavoriteScreenViewModel = hiltViewModel(),
-    userStateViewModel: UserStateViewModel = hiltViewModel()
 ) {
 
   //  val houseList = favoriteScreenViewModel.favoriteHouses.collectAsState()

@@ -23,17 +23,6 @@ object AppModule {
         return FirebaseFirestore.getInstance()  // Provide FirebaseFirestore instance
     }
 
-    @Module
-    @InstallIn(SingletonComponent::class)
-    object ViewModelModule {
-
-        @Provides
-        @Singleton
-        fun provideUserStateViewModel(): UserStateViewModel {
-            return UserStateViewModel()
-        }
-    }
-
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): HouseDatabase {

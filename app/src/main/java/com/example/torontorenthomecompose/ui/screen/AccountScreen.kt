@@ -38,7 +38,8 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 @Composable
 fun AccountScreen(
     navController: NavHostController,
-    userStateViewModel: UserStateViewModel = hiltViewModel()
+  //  userStateViewModel: UserStateViewModel = hiltViewModel()
+    userStateViewModel: UserStateViewModel
 ) {
     //from the userState variable this userEmail is get from the firestore db and show in
     //the after login UI

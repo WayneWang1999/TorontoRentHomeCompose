@@ -144,12 +144,14 @@ fun NavHostContainer(
         // a userStateViewModel in this NavHost
         composable(Routes.Favorites.route) {
             FavoriteScreen(
-                navController
+                navController,
+                userStateViewModel,
             )
         }
         composable(Routes.Account.route) {
             AccountScreen(
-                navController
+                navController,
+                userStateViewModel
             )
         }
 
@@ -162,7 +164,6 @@ fun NavHostContainer(
                 houseId = houseId
             )
         }
-
 
         composable(Routes.SignUp.route) {
             SignUpScreen(
