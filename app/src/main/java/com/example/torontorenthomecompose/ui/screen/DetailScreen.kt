@@ -30,6 +30,8 @@ import com.example.torontorenthome.models.House
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
+import java.text.NumberFormat
+import java.util.Locale
 
 @Composable
 fun DetailScreen(
@@ -111,10 +113,10 @@ fun DetailScreen(
                                 .padding(vertical = 8.dp)
                                 .background(Color.LightGray)
                         )
-
+                        val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(houseDetails.price)
                         // Price
                         Text(
-                            text = "Price: $${houseDetails.price}",
+                            text = "Price: $formattedPrice",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF4CAF50),

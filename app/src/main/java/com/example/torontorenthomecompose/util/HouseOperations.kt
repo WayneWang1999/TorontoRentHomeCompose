@@ -37,6 +37,11 @@ class HouseOperations(
             "https://media.istockphoto.com/id/508882763/photo/luxury-house-exterior.jpg?s=2048x2048&w=is&k=20&c=eoYxc8Pn0UU83nqM7kC767oZKWBkN4Tsz-VORtqCiSQ=",
             "https://media.istockphoto.com/id/478398208/photo/modern-log-cabin-on-waterfront-with-rustic-feel.jpg?s=2048x2048&w=is&k=20&c=9qP1PiqqJfpghRzeLGJmdxmcWwgnZ6OS7b2c6vSMw2U=",
             "https://media.istockphoto.com/id/1146993778/photo/modern-suburban-house-exterior.jpg?s=1024x1024&w=is&k=20&c=EH_sPqbp58U_E7H8mGdNMMZqfwo3V0XfjSk2vRp5Cx8=",
+            "https://images.unsplash.com/photo-1729606454985-684729455b18?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1701202602671-34185a5ccf28?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://images.unsplash.com/photo-1701202778110-40a875280a92?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "https://media.istockphoto.com/id/155700839/photo/a-beautiful-home-available-for-rent.jpg?s=2048x2048&w=is&k=20&c=gakLVfBJAIPbYj_8EXKz8z9XKCUceY8KcrpDp_jGTRY=",
+            "https://media.istockphoto.com/id/177709534/photo/sold-home-for-sale-real-estate-sign-and-house.jpg?s=2048x2048&w=is&k=20&c=nYoDxC9Ngati2MOaQcFVuJRX8fexMEB2q_DvIU14iAM=",
         )
 
         for (i in 1..50) {
@@ -53,7 +58,7 @@ class HouseOperations(
                 bathrooms = Random.nextInt(1,6),
                 area = Random.nextInt(500,10000),
                 price = Random.nextInt(1000000,100000000),
-                imageUrl = listOf(imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random()),
+                imageUrl = listOf(imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random(),imageUrls.random()),
 
             )
 
