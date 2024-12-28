@@ -40,7 +40,8 @@ class FavoriteScreenViewModel @Inject constructor(
 
     private fun fetchHouses() {
         viewModelScope.launch {
-            houseRepository.fetchHouses()
+           // houseRepository.fetchHouses()
+            houseRepository.startListeningForHouses(viewModelScope)
         }
     }
 }

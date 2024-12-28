@@ -34,7 +34,8 @@ class MapScreenViewModel @Inject constructor (
 
     private fun fetchHouseLocations() {
         viewModelScope.launch {
-            houseRepository.fetchHouses()
+           // houseRepository.fetchHouses()
+            houseRepository.startListeningForHouses(viewModelScope)
         }
     }
 
