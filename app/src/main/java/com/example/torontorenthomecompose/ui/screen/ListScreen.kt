@@ -137,6 +137,19 @@ fun ListScreen(
                 CircularProgressIndicator()
             }
         } else {
+            /*To calculate whether the user has passed the first item, use LazyColumn's LazyListState and check
+            if listState.firstVisibleItemIndex > 0.This solution is not as efficient as it could be,
+            because the composable function reading showButton recomposes as often as firstVisibleItemIndex changes -
+            which happens frequently when scrolling. Instead,you want the function to recompose only when the condition
+            changes between true and false.There's an API that allows you to do this: the derivedStateOf API.listState
+            is an observable Compose State. Your calculation, showButton, also needs to be a Compose State since you want
+             the UI to recompose when its value changes, and show or hide the button.Use derivedStateOf when you want a
+             Compose State that's derived from another State. The derivedStateOf calculation block is executed every time
+             the internal state changes, but the composable function only recomposes when the result of the calculation
+             is different from the last one. This minimizes the amount of times functions reading showButton recompose.
+           Using the derivedStateOf API in this case is a better and more efficient alternative.
+           You'll also wrap the call with the remember API, so the calculated value survives recomposition.
+            */
             val listState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
