@@ -10,18 +10,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +40,7 @@ import androidx.navigation.NavHostController
 import com.example.torontorenthomecompose.ui.screen.models.Routes
 import com.example.torontorenthomecompose.ui.screen.viewmodels.ListScreenViewModel
 import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ListScreen(
@@ -56,6 +63,7 @@ fun ListScreen(
     // Local variables
     var searchQuery by remember { mutableStateOf("") }//Search query state
 
+
 // Apply both search query and filters
     val filteredHouses = remember(searchQuery, filters, houseList) {
         houseList.filter { house ->
@@ -76,7 +84,7 @@ fun ListScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         // Search Component
         Row(
             modifier = Modifier
@@ -129,8 +137,10 @@ fun ListScreen(
                 CircularProgressIndicator()
             }
         } else {
+            val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                state = listState
             ) {
                 items(filteredHouses.size) { index ->
                     val house = filteredHouses[index]
@@ -182,9 +192,39 @@ fun ListScreen(
                     }
                 }
             }
+            // Show the button if the first visible item is past
+            // the first item. We use a remembered derived state to
+            // minimize unnecessary compositions
+            val showButton by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex > 0
+                }
+            }
+            if (showButton) {
+                val coroutineScope = rememberCoroutineScope()
+                FloatingActionButton(
+                    //    backgroundColor = MaterialTheme.colors.primary,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = Color.Red,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .navigationBarsPadding()
+                        .padding(bottom = 8.dp),
+                    onClick = {
+                        coroutineScope.launch {
+                            listState.scrollToItem(0)
+                        }
+                    }
+                ) {
+                    Text("Up!")
+                }
+            }
 
         }
+
+
     }
+
 }
 
 
