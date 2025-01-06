@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
@@ -26,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.torontorenthome.util.HouseOperations
 import com.example.torontorenthomecompose.ui.screen.AccountScreen
 import com.example.torontorenthomecompose.ui.screen.DetailScreen
 import com.example.torontorenthomecompose.ui.screen.FavoriteScreen
@@ -41,10 +41,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-      override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp() //
+            AppTheme {
+                MyApp() //
+            }
 //            // Create an instance of HouseOperations
 //            val houseOperations = HouseOperations(this)
 //            houseOperations.generateRandomHousesAndUpload()
