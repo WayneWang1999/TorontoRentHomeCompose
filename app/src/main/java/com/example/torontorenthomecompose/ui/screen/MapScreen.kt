@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +43,6 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-
 
 
 @Composable
@@ -89,13 +87,13 @@ fun MapScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)) // Light Gray Background
+            .background(MaterialTheme.colorScheme.primary) // Light Gray Background
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp) // Slightly taller for better visibility
-                .background(Color(0xFF1E88E5)), // Updated to a more modern blue shade
+                .background(MaterialTheme.colorScheme.onSecondary), // Updated to a more modern blue shade
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Logo or Title
@@ -104,7 +102,7 @@ fun MapScreen(
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .weight(0.25f),
-                color = Color.White,
+              //  color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 22.sp,
                 maxLines = 1
             )
@@ -118,14 +116,6 @@ fun MapScreen(
                 modifier = Modifier
                     .padding(horizontal = 8.dp, vertical = 4.dp)
                     .weight(0.6f),
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xFFF5F5F5), // Background color
-                    unfocusedContainerColor = Color(0xFFF5F5F5),
-                    focusedIndicatorColor = Color.Blue, // Border color when focused
-                    unfocusedIndicatorColor = Color.Gray, // Border color when not focused
-                    focusedLabelColor = Color.Blue, // Label color when focused
-                    unfocusedLabelColor = Color.Gray // Label color when not focused
-                )
             )
 // Determine badge count based on filters
             val badgeCount = if (filters != null) 1 else 0
@@ -170,7 +160,7 @@ fun MapScreen(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(16.dp)
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.surfaceDim)
                         .padding(8.dp)
                 ) {
                     val isFavorite = if (isLoggedIn) {
@@ -213,13 +203,15 @@ fun FilterIconWithBadge(onFilterClick: () -> Unit, badgeCount: Int) {
             .padding(end = 16.dp)
             .size(40.dp)
             .clickable { onFilterClick() }
-            .background(Color(0xFF1565C0), shape = CircleShape), // Circular button with blue background
+            .background(
+                MaterialTheme.colorScheme.background,
+                shape = CircleShape
+            ), // Circular button with blue background
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_action_filter),
             contentDescription = "Filter",
-            tint = Color.White,
             modifier = Modifier.size(24.dp)
         )
 
@@ -229,11 +221,9 @@ fun FilterIconWithBadge(onFilterClick: () -> Unit, badgeCount: Int) {
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .offset(x = 8.dp, y = (-4).dp),
-                containerColor = Color.Red
             ) {
                 Text(
                     text = badgeCount.toString(),
-                    color = Color.White,
                     fontSize = 10.sp
                 )
             }

@@ -1,6 +1,5 @@
 package com.example.torontorenthomecompose.ui.screen
 
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,9 +17,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -31,8 +27,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -82,7 +76,8 @@ fun ListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .background(Color(0xFF1E88E5)),
+                    .background(MaterialTheme.colorScheme.onSecondary),
+                //   .background(Color(0xFF1E88E5)),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -90,7 +85,7 @@ fun ListScreen(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .weight(0.25f),
-                    color = Color.White,
+                    //    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 22.sp,
                     maxLines = 1
                 )
@@ -103,14 +98,6 @@ fun ListScreen(
                     modifier = Modifier
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                         .weight(0.6f),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFFF5F5F5),
-                        unfocusedContainerColor = Color(0xFFF5F5F5),
-                        focusedIndicatorColor = Color.Blue,
-                        unfocusedIndicatorColor = Color.Gray,
-                        focusedLabelColor = Color.Blue,
-                        unfocusedLabelColor = Color.Gray
-                    )
                 )
 
                 val badgeCount = if (filters != null) 1 else 0
@@ -152,7 +139,11 @@ fun ListScreen(
                                 bathrooms = house.bathrooms,
                                 area = house.area,
                                 createTime = house.createTime,
-                                onFavoriteClick = { houseId -> userStateViewModel.toggleFavorite(houseId) },
+                                onFavoriteClick = { houseId ->
+                                    userStateViewModel.toggleFavorite(
+                                        houseId
+                                    )
+                                },
                                 isFavorite = isFavorite,
                                 modifier = Modifier
                                     .animateContentSize()
@@ -167,8 +158,6 @@ fun ListScreen(
         // Floating Action Button inside the same Box
         if (showButton) {
             FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = Color.Red,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),

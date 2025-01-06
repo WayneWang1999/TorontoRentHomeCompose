@@ -1,5 +1,6 @@
 package com.example.torontorenthomecompose.ui.screen
 
+
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,7 +63,8 @@ fun SignUpScreen(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back")
+                contentDescription = "Back"
+            )
         }
 
         Column(
@@ -92,7 +94,10 @@ fun SignUpScreen(
                     .padding(bottom = 8.dp)
             )
             if (firstNameError.isNotBlank()) {
-                Text(text = firstNameError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+                Text(
+                    text = firstNameError,
+                    fontSize = 12.sp
+                )
             }
 
             // Last Name Input
@@ -109,7 +114,10 @@ fun SignUpScreen(
                     .padding(bottom = 8.dp)
             )
             if (lastNameError.isNotBlank()) {
-                Text(text = lastNameError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+                Text(
+                    text = lastNameError,
+                    fontSize = 12.sp
+                )
             }
 
             // Email Input
@@ -127,7 +135,10 @@ fun SignUpScreen(
                     .padding(bottom = 8.dp)
             )
             if (emailError.isNotBlank()) {
-                Text(text = emailError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+                Text(
+                    text = emailError,
+                    fontSize = 12.sp
+                )
             }
 
             // Password Input
@@ -154,7 +165,10 @@ fun SignUpScreen(
                     .padding(bottom = 8.dp)
             )
             if (passwordError.isNotBlank()) {
-                Text(text = passwordError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+                Text(
+                    text = passwordError,
+                    fontSize = 12.sp
+                )
             }
 
             // Re-enter Password Input
@@ -185,7 +199,10 @@ fun SignUpScreen(
                     .padding(bottom = 24.dp)
             )
             if (reEnterPasswordError.isNotBlank()) {
-                Text(text = reEnterPasswordError, color = androidx.compose.ui.graphics.Color.Red, fontSize = 12.sp)
+                Text(
+                    text = reEnterPasswordError,
+                    fontSize = 12.sp
+                )
             }
 
             // Sign-Up Button
@@ -195,7 +212,8 @@ fun SignUpScreen(
                     if (lastName.isBlank()) lastNameError = "Last name cannot be empty"
                     if (email.isBlank()) emailError = "Email cannot be empty"
                     if (password.isBlank()) passwordError = "Password cannot be empty"
-                    if (reEnterPassword.isBlank()) reEnterPasswordError = "Re-enter password cannot be empty"
+                    if (reEnterPassword.isBlank()) reEnterPasswordError =
+                        "Re-enter password cannot be empty"
                     if (password != reEnterPassword) reEnterPasswordError = "Passwords do not match"
 
                     if (firstNameError.isBlank() && lastNameError.isBlank() &&
@@ -221,12 +239,18 @@ fun SignUpScreen(
                                         firestore.collection("buyers").document(userId)
                                             .set(user)
                                             .addOnSuccessListener {
-                                                Log.d("SignUpScreen", "User registered successfully")
+                                                Log.d(
+                                                    "SignUpScreen",
+                                                    "User registered successfully"
+                                                )
                                                 navController.navigate("account")
                                                 // Navigate to next screen or show success
                                             }
                                             .addOnFailureListener { e ->
-                                                Log.d("SignUpScreen", "Firestore Error: ${e.message}")
+                                                Log.d(
+                                                    "SignUpScreen",
+                                                    "Firestore Error: ${e.message}"
+                                                )
                                                 // Show error to the user
                                             }
                                     }

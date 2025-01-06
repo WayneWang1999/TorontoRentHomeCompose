@@ -1,6 +1,5 @@
 package com.example.torontorenthomecompose.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,9 +48,10 @@ fun DetailScreen(
         when (val houseDetails = house.value) {
             null -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             else -> {
-                Column(modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
                 ) {
                     // Image Pager
                     Row(
@@ -68,10 +67,9 @@ fun DetailScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                               // imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black
-                            )
+
+                                )
                         }
 
                         // Text
@@ -79,7 +77,6 @@ fun DetailScreen(
                             text = "This is the House detail",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF4CAF50),
                             modifier = Modifier.padding(start = 8.dp) // Add padding between button and text
                         )
                     }
@@ -95,13 +92,11 @@ fun DetailScreen(
                             text = "Address:",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Color.Gray
                         )
                         Text(
                             text = houseDetails.address,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
@@ -111,15 +106,14 @@ fun DetailScreen(
                                 .height(1.dp)
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp)
-                                .background(Color.LightGray)
                         )
-                        val formattedPrice = NumberFormat.getNumberInstance(Locale.US).format(houseDetails.price)
+                        val formattedPrice =
+                            NumberFormat.getNumberInstance(Locale.US).format(houseDetails.price)
                         // Price
                         Text(
                             text = "Price: $formattedPrice",
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF4CAF50),
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
@@ -142,7 +136,7 @@ fun DetailScreen(
                             text = if (houseDetails.isAvailable) "Available" else "Sold Out",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (houseDetails.isAvailable) Color(0xFF4CAF50) else Color.Red,
+                            // color = if (houseDetails.isAvailable) Color(0xFF4CAF50) else Color.Red,
                             modifier = Modifier.padding(top = 16.dp)
                         )
                         // Availability or Custom Tags
@@ -150,14 +144,12 @@ fun DetailScreen(
                             text = "List Description",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            color =  Color(0xFF4CAF50),
                             modifier = Modifier.padding(top = 16.dp)
                         )
                         Text(
                             text = "${houseDetails.description}",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            color =  Color.Black,
                             modifier = Modifier.padding(top = 16.dp)
                         )
                     }

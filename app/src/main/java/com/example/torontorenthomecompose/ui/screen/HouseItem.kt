@@ -140,7 +140,7 @@ fun HouseImagesPagerWithArrows(imageUrls: List<String>) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Previous",
-                tint = Color.Black
+
             )
         }
 
@@ -161,7 +161,7 @@ fun HouseImagesPagerWithArrows(imageUrls: List<String>) {
               //  imageVector = Icons.Default.ArrowForward,
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                 contentDescription = "Next",
-                tint = Color.Black
+
             )
         }
     }

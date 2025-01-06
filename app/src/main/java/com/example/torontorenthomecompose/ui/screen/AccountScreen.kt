@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -37,7 +36,6 @@ import com.example.torontorenthomecompose.ui.screen.viewmodels.UserStateViewMode
 @Composable
 fun AccountScreen(
     navController: NavHostController,
-  //  userStateViewModel: UserStateViewModel = hiltViewModel()
     userStateViewModel: UserStateViewModel
 ) {
     //from the userState variable this userEmail is get from the firestore db and show in
@@ -46,7 +44,7 @@ fun AccountScreen(
     val userEmail by userStateViewModel.userEmail.collectAsState()
     val errorMessage by userStateViewModel.errorMessage.collectAsState()
     val isLoading by userStateViewModel.isLoading.collectAsState()
-   // local variable
+    // local variable
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -63,7 +61,6 @@ fun AccountScreen(
             if (errorMessage.isNotEmpty()) {
                 Text(
                     text = errorMessage,
-                    color = Color.Red,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -136,7 +133,7 @@ fun LoginForm(
         if (emailError != null) {
             Text(
                 text = emailError,
-                color = Color.Red,
+                // color = Color.Red,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -164,7 +161,6 @@ fun LoginForm(
         if (passwordError != null) {
             Text(
                 text = passwordError,
-                color = Color.Red,
                 fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -181,7 +177,6 @@ fun LoginForm(
             text = "Create an account",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF718BD0),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
@@ -190,6 +185,7 @@ fun LoginForm(
         )
     }
 }
+
 @Composable
 fun LoggedInUI(
     userEmail: String,
