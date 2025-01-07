@@ -57,12 +57,12 @@ fun FilterScreen(
         ) {
             Text(
                 text = "Filters",
-                fontSize = 20.sp,
+               // fontSize = 20.sp,
                 modifier = Modifier.weight(1f)
             )
             Text(
                 text = "Close",
-                fontSize = 14.sp,
+              //  fontSize = 14.sp,
                 modifier = Modifier.clickable {
                     onBackClick()
                     }
@@ -72,7 +72,9 @@ fun FilterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Price Range
-        Text(text = "Price Range", fontSize = 16.sp)
+        Text(text = "Price Range",
+           // fontSize = 16.sp
+        )
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = minPrice,
@@ -94,7 +96,9 @@ fun FilterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Bedrooms
-        Text(text = "Bedrooms", fontSize = 16.sp)
+        Text(text = "Bedrooms",
+           // fontSize = 16.sp
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -112,13 +116,18 @@ fun FilterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Bathrooms
-        Text(text = "Bathrooms", fontSize = 16.sp)
+        Text(
+            text = "Bathrooms",
+           // fontSize = 16.sp
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "$bathrooms", fontSize = 14.sp)
+            Text(text = "$bathrooms",
+               // fontSize = 14.sp
+            )
             Slider(
                 value = bathrooms.toFloat(),
                 onValueChange = { bathrooms = it.toInt() },
@@ -130,7 +139,9 @@ fun FilterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // Property Type
-        Text(text = "Property Type", fontSize = 16.sp)
+        Text(text = "Property Type",
+           // fontSize = 16.sp
+        )
         propertyTypes.forEach { type ->
             Row(
                 modifier = Modifier

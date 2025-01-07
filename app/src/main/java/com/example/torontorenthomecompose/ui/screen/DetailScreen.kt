@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
@@ -75,7 +76,8 @@ fun DetailScreen(
                         // Text
                         Text(
                             text = "This is the House detail",
-                            fontSize = 22.sp,
+                            style= MaterialTheme.typography.titleLarge,
+                            //fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(start = 8.dp) // Add padding between button and text
                         )
@@ -90,13 +92,14 @@ fun DetailScreen(
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "Address:",
-                            fontSize = 18.sp,
+                            style=MaterialTheme.typography.titleMedium,
+//                            fontSize = 18.sp,
                             fontWeight = FontWeight.SemiBold,
                         )
                         Text(
                             text = houseDetails.address,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
+//                            fontSize = 20.sp,
+//                            fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
@@ -112,7 +115,8 @@ fun DetailScreen(
                         // Price
                         Text(
                             text = "Price: $formattedPrice",
-                            fontSize = 22.sp,
+                            style=MaterialTheme.typography.titleLarge,
+                           // fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -120,13 +124,13 @@ fun DetailScreen(
                         // Other Details
                         Text(
                             text = "Bedrooms: ${houseDetails.bedrooms}   Bathrooms: ${houseDetails.bathrooms}",
-                            fontSize = 18.sp,
+//                            fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                         Text(
                             text = "Area: ${houseDetails.area} sqft",
-                            fontSize = 18.sp,
+//                            fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -134,7 +138,7 @@ fun DetailScreen(
                         // Availability or Custom Tags
                         Text(
                             text = if (houseDetails.isAvailable) "Available" else "Sold Out",
-                            fontSize = 18.sp,
+//                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             // color = if (houseDetails.isAvailable) Color(0xFF4CAF50) else Color.Red,
                             modifier = Modifier.padding(top = 16.dp)
@@ -142,14 +146,15 @@ fun DetailScreen(
                         // Availability or Custom Tags
                         Text(
                             text = "List Description",
-                            fontSize = 24.sp,
+                            style = MaterialTheme.typography.titleMedium,
+//                            fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 16.dp)
                         )
                         Text(
                             text = "${houseDetails.description}",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
+//                            fontSize = 18.sp,
+//                            fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 16.dp)
                         )
                     }

@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,7 +77,7 @@ fun SignUpScreen(
         ) {
             Text(
                 text = "Sign Up for TORH.ca",
-                fontSize = 24.sp,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
@@ -96,7 +97,6 @@ fun SignUpScreen(
             if (firstNameError.isNotBlank()) {
                 Text(
                     text = firstNameError,
-                    fontSize = 12.sp
                 )
             }
 
@@ -116,7 +116,6 @@ fun SignUpScreen(
             if (lastNameError.isNotBlank()) {
                 Text(
                     text = lastNameError,
-                    fontSize = 12.sp
                 )
             }
 
@@ -137,7 +136,6 @@ fun SignUpScreen(
             if (emailError.isNotBlank()) {
                 Text(
                     text = emailError,
-                    fontSize = 12.sp
                 )
             }
 
@@ -167,7 +165,6 @@ fun SignUpScreen(
             if (passwordError.isNotBlank()) {
                 Text(
                     text = passwordError,
-                    fontSize = 12.sp
                 )
             }
 
@@ -201,7 +198,6 @@ fun SignUpScreen(
             if (reEnterPasswordError.isNotBlank()) {
                 Text(
                     text = reEnterPasswordError,
-                    fontSize = 12.sp
                 )
             }
 

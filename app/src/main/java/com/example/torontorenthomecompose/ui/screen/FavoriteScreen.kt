@@ -77,8 +77,8 @@ fun EmptyFavoritesMessage() {
 fun LoggedOutMessage() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            text = "Please go to Account log in to view your favorite houses.",
-            fontSize = 16.sp,
+            text = "Please go to Account log in",
+            //fontSize = 16.sp,
         )
     }
 }

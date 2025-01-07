@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -134,7 +135,7 @@ fun LoginForm(
             Text(
                 text = emailError,
                 // color = Color.Red,
-                fontSize = 12.sp,
+               // fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -161,7 +162,7 @@ fun LoginForm(
         if (passwordError != null) {
             Text(
                 text = passwordError,
-                fontSize = 12.sp,
+                //fontSize = 12.sp,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -175,7 +176,7 @@ fun LoginForm(
 
         Text(
             text = "Create an account",
-            fontSize = 14.sp,
+           // fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
@@ -193,7 +194,8 @@ fun LoggedInUI(
 ) {
     Text(
         text = "Welcome, $userEmail!",
-        fontSize = 24.sp,
+        style = MaterialTheme.typography.titleLarge,
+        //fontSize = 24.sp,
         modifier = Modifier.padding(bottom = 16.dp)
     )
 

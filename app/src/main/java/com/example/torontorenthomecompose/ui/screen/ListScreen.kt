@@ -86,7 +86,7 @@ fun ListScreen(
                         .padding(start = 12.dp)
                         .weight(0.25f),
                     //    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 22.sp,
+                    style=MaterialTheme.typography.titleMedium,
                     maxLines = 1
                 )
 

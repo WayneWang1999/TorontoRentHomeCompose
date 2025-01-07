@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -62,7 +63,8 @@ fun HouseItem(
         ) {
             Text(
                 text = "Price: $$formattedPrice",
-                fontSize = 30.sp,
+                //fontSize = 30.sp,
+                style= MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
             )
@@ -76,25 +78,25 @@ fun HouseItem(
                     ),
                     contentDescription = "Favorite",
                     modifier = Modifier.size(40.dp),
-                    tint = Color.Red
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }
         // Description
         Text(
             text = address,
-            fontSize = 14.sp,
+           // fontSize = 14.sp,
             modifier = Modifier.padding(top = 4.dp)
         )
         // Bedrooms
         Text(
             text = "Bedrooms: $bedrooms   Bathrooms:$bathrooms  Area:$area",
-            fontSize = 14.sp,
+           // fontSize = 14.sp,
             modifier = Modifier.padding(top = 4.dp)
         )
         Text(
             text = "$createTime ago",
-            fontSize = 14.sp,
+          //  fontSize = 14.sp,
             modifier = Modifier.padding(top = 4.dp)
         )
 
